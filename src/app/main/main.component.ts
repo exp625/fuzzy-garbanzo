@@ -26,4 +26,8 @@ export class MainComponent implements OnInit {
     this.spotify.pause().subscribe();
   }
 
+  play () {
+    this.spotify.play().subscribe();
+  }
+
 }

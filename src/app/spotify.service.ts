@@ -14,7 +14,13 @@ export class SpotifyService {
   private scope = 'user-read-private user-read-email user-modify-playback-state';
   private spotifyConnectApi = 'https://api.spotify.com/v1/me/player';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    if (!sessionStorage.getItem('authToken')) {
+      sessionStorage.setItem('authToken', 'temp');
+      this.login();
+    }
+    this.authToken = sessionStorage.getItem('authToken');
+  }
 
 
   login () {
@@ -27,7 +33,7 @@ export class SpotifyService {
   setAuthToken (authToken: string) {
 
     this.authToken = authToken;
-    console.log(this.authToken);
+    sessionStorage.setItem('authToken', this.authToken);
   }
 
   getAuthToken () {
@@ -37,6 +43,11 @@ export class SpotifyService {
   pause () {
     const payload = {'device_id': ''};
     return this.http.put(this.spotifyConnectApi + '/pause', payload, {headers: new HttpHeaders({'Authorization': 'Bearer ' + this.authToken})});
+  }
+
+  play () {
+    const payload = {'device_id': ''};
+    return this.http.put(this.spotifyConnectApi + '/play', payload, {headers: new HttpHeaders({'Authorization': 'Bearer ' + this.authToken})});
   }
 
 }
