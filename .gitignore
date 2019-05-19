@@ -1,22 +1,15 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/public/out-tsc
-/public/dist
+/dist
+/tmp
+/out-tsc
 
 # dependencies
 /node_modules
 
-
-#folders
-/backup
-/images
-/latex
-/pdf
-
 # IDEs and editors
 /.idea
-public/.idea
 .project
 .classpath
 .c9/
@@ -24,6 +17,12 @@ public/.idea
 .settings/
 *.sublime-workspace
 
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
 # misc
 /.sass-cache
