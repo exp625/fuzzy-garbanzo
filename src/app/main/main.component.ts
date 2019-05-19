@@ -8,14 +8,22 @@ import { SpotifyService} from '../spotify.service';
 })
 export class MainComponent implements OnInit {
 
+  public pauseButtonFlag = false;
+
   constructor(private spotify: SpotifyService) { }
 
   ngOnInit() {
-
+    if (this.spotify.getAuthToken()) {
+      this.pauseButtonFlag = true;
+    }
   }
 
   test () {
     this.spotify.login();
+  }
+
+  pause () {
+    this.spotify.pause().subscribe();
   }
 
 }
