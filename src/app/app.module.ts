@@ -9,6 +9,10 @@ import { SpotifyService} from './spotify.service';
 import {HttpClientModule} from '@angular/common/http';
 import { CallbackComponent } from './callback/callback.component';
 
+import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { MatButtonModule, MatCheckboxModule } from '@angular/material';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,7 +22,10 @@ import { CallbackComponent } from './callback/callback.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatCheckboxModule
   ],
   providers: [SpotifyService],
   bootstrap: [AppComponent]
