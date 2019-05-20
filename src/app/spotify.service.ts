@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpEvent, HttpHandler, HttpHeaders} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -23,29 +23,29 @@ export class SpotifyService {
   }
 
 
-  login () {
+  login() {
     window.location.href = 'https://accounts.spotify.com/authorize?client_id=' + this.clientId
       + '&redirect_uri=' + this.redirect
       + '&scope=' + this.scope
       + '&response_type=token';
   }
 
-  setAuthToken (authToken: string) {
+  setAuthToken(authToken: string) {
 
     this.authToken = authToken;
     sessionStorage.setItem('authToken', this.authToken);
   }
 
-  getAuthToken () {
+  getAuthToken() {
     return this.authToken;
   }
 
-  pause () {
+  pause() {
     const payload = {'device_id': ''};
     return this.http.put(this.spotifyConnectApi + '/pause', payload, {headers: new HttpHeaders({'Authorization': 'Bearer ' + this.authToken})});
   }
 
-  play () {
+  play() {
     const payload = {'device_id': ''};
     return this.http.put(this.spotifyConnectApi + '/play', payload, {headers: new HttpHeaders({'Authorization': 'Bearer ' + this.authToken})});
   }

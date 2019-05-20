@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SpotifyService} from '../spotify.service';
 
@@ -9,7 +9,8 @@ import {SpotifyService} from '../spotify.service';
 })
 export class CallbackComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private spotify: SpotifyService, private router: Router) { }
+  constructor(private route: ActivatedRoute, private spotify: SpotifyService, private router: Router) {
+  }
 
   ngOnInit() {
     const fragment = new URLSearchParams(this.route.snapshot.fragment);

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { SpotifyService} from '../spotify.service';
+import {Component, OnInit} from '@angular/core';
+import {SpotifyService} from '../spotify.service';
 
 @Component({
   selector: 'app-main',
@@ -10,7 +10,8 @@ export class MainComponent implements OnInit {
 
   public pauseButtonFlag = false;
 
-  constructor(private spotify: SpotifyService) { }
+  constructor(private spotify: SpotifyService) {
+  }
 
   ngOnInit() {
     if (this.spotify.getAuthToken()) {
@@ -18,15 +19,15 @@ export class MainComponent implements OnInit {
     }
   }
 
-  test () {
+  test() {
     this.spotify.login();
   }
 
-  pause () {
+  pause() {
     this.spotify.pause().subscribe();
   }
 
-  play () {
+  play() {
     this.spotify.play().subscribe();
   }
 
