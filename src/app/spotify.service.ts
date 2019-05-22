@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpEvent, HttpHandler, HttpHeaders} from '@angular/common/http';
+import {SpotifySong} from './spotify-song';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class SpotifyService {
   private redirect = 'http://localhost:4200/callback';
   private scope = 'user-read-private user-read-email user-modify-playback-state';
   private spotifyConnectApi = 'https://api.spotify.com/v1/me/player';
+  private spotifyWebApi = 'https://api.spotify.com/v1';
 
   constructor(private http: HttpClient) {
     if (!sessionStorage.getItem('authToken')) {
@@ -48,6 +50,24 @@ export class SpotifyService {
   play () {
     const payload = {'device_id': ''};
     return this.http.put(this.spotifyConnectApi + '/play', payload, {headers: new HttpHeaders({'Authorization': 'Bearer ' + this.authToken})});
+  }
+
+  spotifySearch(text: string) {
+    const payload = {'q': text + '*', 'type': 'track', 'market': 'DE'};
+    return this.http.get(this.spotifyWebApi + '/search' + this.jsonToQueryString(payload), {headers: new HttpHeaders({'Authorization': 'Bearer ' + this.authToken})});
+  }
+
+  playSong(song: SpotifySong) {
+    const payload = {'uris': [song.uri], 'device_id': ''};
+    return this.http.put(this.spotifyConnectApi + '/play' , payload, {headers: new HttpHeaders({'Authorization': 'Bearer ' + this.authToken})});
+  }
+
+  jsonToQueryString(json) {
+    return '?' +
+      Object.keys(json).map(function(key) {
+        return encodeURIComponent(key) + '=' +
+          encodeURIComponent(json[key]);
+      }).join('&');
   }
 
 }
