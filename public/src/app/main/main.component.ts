@@ -45,7 +45,7 @@ export class MainComponent implements OnInit {
         value.tracks.items.forEach(song => {
           this.songList.push(new SpotifySong(song.name, song.popularity, song.uri));
         });
-        this.songList.sort((a, b) => b.popularity - a.popularity;
+        this.songList.sort((a, b) => b.popularity - a.popularity);
 
 
       });
@@ -57,7 +57,7 @@ export class MainComponent implements OnInit {
   clear() {
     this.onSearch = false;
     this.songList = [];
-    document.getElementById('spotifySearchText').value = '';
+    document.getElementById('spotifySearchText').innerText = '';
   }
 
   playSong(song: SpotifySong) {

@@ -54,7 +54,7 @@ export class SpotifyService {
 
   spotifySearch(text: string) {
     const payload = {'q': text + '*', 'type': 'track', 'market': 'DE'};
-    return this.http.get(this.spotifyWebApi + '/search' + this.jsonToQueryString(payload), {headers: new HttpHeaders({'Authorization': 'Bearer ' + this.authToken})});
+    return this.http.get<SpotifySong>(this.spotifyWebApi + '/search' + this.jsonToQueryString(payload), {headers: new HttpHeaders({'Authorization': 'Bearer ' + this.authToken})});
   }
 
   playSong(song: SpotifySong) {
