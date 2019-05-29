@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpEvent, HttpHandler, HttpHeaders} from '@angular/common/http';
-import {SpotifySong} from './spotify-song';
+import {SpotifySong} from '../classes/spotify-song';
 
 @Injectable({
   providedIn: 'root'

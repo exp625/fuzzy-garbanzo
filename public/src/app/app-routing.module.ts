@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { MainComponent } from './main/main.component';
-import {CallbackComponent} from './callback/callback.component';
+import { MainComponent } from './components/main/main.component';
+import {CallbackComponent} from './components/callback/callback.component';
 
 const routes: Routes = [
   {
