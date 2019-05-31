@@ -43,7 +43,7 @@ export class MainComponent implements OnInit {
       this.spotify.spotifySearch(this.spotifySearchText).subscribe(value => {
         this.songList = [];
         value.tracks.items.forEach(song => {
-          this.songList.push(new SpotifySong(song.name, song.popularity, song.uri));
+          this.songList.push(new SpotifySong(song.name, song.popularity, song.uri, 0, null));
         });
         this.songList.sort((a, b) => b.popularity - a.popularity);
 
