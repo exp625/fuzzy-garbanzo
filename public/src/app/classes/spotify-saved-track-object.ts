@@ -1,10 +1,11 @@
+import {SpotifyTrackObjectFull} from './spotify-track-object-full';
+
 export class SpotifySavedTrackObject {
-    constructor(
-        //  
-         public added_at:  ,
-        //  
-         public a timestamp: timestamp,
-        // Information about the track.
-         public track: TrackObjectFull,
-    ) {}
+  constructor(
+    //
+    public added_at: timestamp,
+    // Information about the track.
+    public track: SpotifyTrackObjectFull,
+  ) {
+  }
 }
