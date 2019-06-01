@@ -5,7 +5,8 @@ import {SpotifyRestrictionsObject} from './spotify-restrictions-object';
 
 export class SpotifyTrackObjectSimplified {
   constructor(
-    // The artists who performed the track. Each artist object includes a link in href to more detailed information about the artist.
+    // The artists who performed the track. Each artist object includes a link in href to more detailed
+    // information about the artist.
     public artists: SpotifyArtistObjectSimplified,
     // A list of the countries in which the track can be played, identified by their ISO 3166-1 alpha-2 code.
     public available_markets: Array<string>,
@@ -21,11 +22,17 @@ export class SpotifyTrackObjectSimplified {
     public href: string,
     // The Spotify ID for the track.
     public id: string,
-    // Part of the response when Track Relinking is applied. If true , the track is playable in the given market. Otherwise false.
+    // Part of the response when Track Relinking is applied. If true , the track is playable in the given market.
+    // Otherwise false.
     public is_playable: boolean,
-    // Part of the response when Track Relinking is applied and is only part of the response if the track linking, in fact, exists. The requested track has been replaced with a different track. The track in the linked_from object contains information about the originally requested track.
+    // Part of the response when Track Relinking is applied and is only part of the response if the track linking,
+    // in fact, exists. The requested track has been replaced with a different track. The track in the linked_from
+    // object contains information about the originally requested track.
     public linked_from: SpotifyTrackLink,
-    // Part of the response when Track Relinking is applied, the original track is not available in the given market, and Spotify did not have any tracks to relink it with. The track response will still contain metadata for the original track, and a restrictions object containing the reason why the track is not available: "restrictions" : {"reason" : "market"}
+    // Part of the response when Track Relinking is applied, the original track is not available in the given market,
+    // and Spotify did not have any tracks to relink it with. The track response will still contain metadata for the
+    // original track, and a restrictions object containing the reason why the track is
+    // not available: "restrictions" : {"reason" : "market"}
     public restrictions: SpotifyRestrictionsObject,
     // The name of the track.
     public name: string,
