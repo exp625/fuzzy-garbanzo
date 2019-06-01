@@ -1,4 +1,4 @@
-export class SpotifyPlayerErrorObject {
+export class SpotifyPlayerError {
   constructor(
     // The HTTP status code. Either 404 NOT FOUND or 403 FORBIDDEN.  Also returned in the response header.
     public status: number,

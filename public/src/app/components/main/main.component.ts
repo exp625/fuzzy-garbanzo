@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SpotifyService} from '../../services/spotify.service';
-import {SpotifyTrackObjectFull} from '../../classes/spotify-track-object-full';
+import {SpotifyTrackFull} from '../../classes/spotify-track-full';
 
 @Component({
   selector: 'app-main',
@@ -11,8 +11,8 @@ export class MainComponent implements OnInit {
 
   public pauseButtonFlag = false;
 
-  public currentSong: SpotifyTrackObjectFull = undefined;
-  public songList: SpotifyTrackObjectFull[] = [];
+  public currentSong: SpotifyTrackFull = undefined;
+  public songList: SpotifyTrackFull[] = [];
   public onSearch = false;
   public spotifySearchText = '';
 
@@ -43,7 +43,7 @@ export class MainComponent implements OnInit {
       this.spotify.spotifySearch(this.spotifySearchText).subscribe(value => {
         this.songList = [];
         value.tracks.items.forEach(song => {
-          this.songList.push(new SpotifyTrackObjectFull(song.name, song.popularity, song.uri, 0, null));
+          this.songList.push(new SpotifyTrackFull(song.name, song.popularity, song.uri, 0, null));
         });
         this.songList.sort((a, b) => b.popularity - a.popularity);
 
@@ -60,7 +60,7 @@ export class MainComponent implements OnInit {
     document.getElementById('spotifySearchText').innerText = '';
   }
 
-  playSong(song: SpotifyTrackObjectFull) {
+  playSong(song: SpotifyTrackFull) {
     console.log(song.uri);
     this.spotify.playSong(song).subscribe(value => console.log(value));
   }

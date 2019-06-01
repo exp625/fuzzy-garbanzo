@@ -1,6 +1,6 @@
-import {SpotifyCursorObject} from './spotify-cursor-object';
+import {SpotifyCursor} from './spotify-cursor';
 
-export class SpotifyCursorBasedPagingObject {
+export class SpotifyPagingCursorBased {
   constructor(
     // A link to the Web API endpoint returning the full result of the request.
     public href: string,
@@ -11,7 +11,7 @@ export class SpotifyCursorBasedPagingObject {
     // URL to the next page of items. ( null if none)
     public next: string,
     // The cursors used to find the next set of items.
-    public cursors: SpotifyCursorObject,
+    public cursors: SpotifyCursor,
     // The maximum number of items available to return.
     public total: number,
   ) {

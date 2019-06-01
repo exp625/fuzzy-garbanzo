@@ -1,13 +1,13 @@
-import {SpotifyExternalUrlObject} from './spotify-external-URL-object';
-import {SpotifyFollowersObject} from './spotify-followers-object';
-import {SpotifyImageObject} from './spotify-image-object';
+import {SpotifyExternalUrl} from './spotify-external-url';
+import {SpotifyFollower} from './spotify-follower';
+import {SpotifyImage} from './spotify-image';
 
-export class SpotifyArtistObjectFull {
+export class SpotifyArtistFull {
   constructor(
     // Known external URLs for this artist.
-    public external_urls: SpotifyExternalUrlObject,
+    public external_urls: SpotifyExternalUrl,
     // Information about the followers of the artist.
-    public followers: SpotifyFollowersObject,
+    public followers: SpotifyFollower,
     // A list of the genres the artist is associated with.
     // For example: "Prog Rock" , "Post-Grunge". (If not yet classified, the array is empty.)
     public genres: Array<string>,
@@ -16,7 +16,7 @@ export class SpotifyArtistObjectFull {
     // The Spotify ID for the artist.
     public id: string,
     // Images of the artist in various sizes, widest first.
-    public images: Array<SpotifyImageObject>,
+    public images: Array<SpotifyImage>,
     // The name of the artist
     public name: string,
     // The popularity of the artist. The value will be between 0 and 100,with 100 being the most popular.

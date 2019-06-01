@@ -1,13 +1,13 @@
-import {SpotifyArtistObjectSimplified} from './spotify-artist-object-simplified';
-import {SpotifyExternalUrlObject} from './spotify-external-URL-object';
+import {SpotifyArtistSimplified} from './spotify-artist-simplified';
+import {SpotifyExternalUrl} from './spotify-external-url';
 import {SpotifyTrackLink} from './spotify-track-link';
-import {SpotifyRestrictionsObject} from './spotify-restrictions-object';
+import {SpotifyRestriction} from './spotify-restriction';
 
-export class SpotifyTrackObjectSimplified {
+export class SpotifyTrackSimplified {
   constructor(
     // The artists who performed the track. Each artist object includes a link in href to more detailed
     // information about the artist.
-    public artists: SpotifyArtistObjectSimplified,
+    public artists: SpotifyArtistSimplified,
     // A list of the countries in which the track can be played, identified by their ISO 3166-1 alpha-2 code.
     public available_markets: Array<string>,
     // The disc number (usually 1 unless the album consists of more than one disc).
@@ -17,7 +17,7 @@ export class SpotifyTrackObjectSimplified {
     // Whether or not the track has explicit lyrics ( true = yes it does; false = no it does not OR unknown).
     public explicit: boolean,
     // External URLs for this track.
-    public external_urls: SpotifyExternalUrlObject,
+    public external_urls: SpotifyExternalUrl,
     // A link to the Web API endpoint providing full details of the track.
     public href: string,
     // The Spotify ID for the track.
@@ -33,7 +33,7 @@ export class SpotifyTrackObjectSimplified {
     // and Spotify did not have any tracks to relink it with. The track response will still contain metadata for the
     // original track, and a restrictions object containing the reason why the track is
     // not available: "restrictions" : {"reason" : "market"}
-    public restrictions: SpotifyRestrictionsObject,
+    public restrictions: SpotifyRestriction,
     // The name of the track.
     public name: string,
     // A URL to a 30 second preview (MP3 format) of the track.

@@ -1,18 +1,18 @@
-import {SpotifyArtistObjectSimplified} from './spotify-artist-object-simplified';
-import {SpotifyAlbumObjectSimplified} from './spotify-album-object-simplified';
-import {SpotifyExternalIdObject} from './spotify-external-ID-object';
-import {SpotifyExternalUrlObject} from './spotify-external-URL-object';
+import {SpotifyArtistSimplified} from './spotify-artist-simplified';
+import {SpotifyAlbumSimplified} from './spotify-album-simplified';
+import {SpotifyExternalId} from './spotify-external-id';
+import {SpotifyExternalUrl} from './spotify-external-url';
 import {SpotifyTrackLink} from './spotify-track-link';
-import {SpotifyRestrictionsObject} from './spotify-restrictions-object';
+import {SpotifyRestriction} from './spotify-restriction';
 
-export class SpotifyTrackObjectFull {
+export class SpotifyTrackFull {
   constructor(
     // The album on which the track appears. The album object includes a link in href to full information
     // about the album.
-    public album: SpotifyAlbumObjectSimplified,
+    public album: SpotifyAlbumSimplified,
     // The artists who performed the track. Each artist object includes a link in href to more detailed
     // information about the artist.
-    public artists: SpotifyArtistObjectSimplified,
+    public artists: SpotifyArtistSimplified,
     // A list of the countries in which the track can be played, identified by their ISO 3166-1 alpha-2 code.
     public available_markets: Array<string>,
     // The disc number (usually 1 unless the album consists of more than one disc).
@@ -22,9 +22,9 @@ export class SpotifyTrackObjectFull {
     // Whether or not the track has explicit lyrics ( true = yes it does; false = no it does not OR unknown).
     public explicit: boolean,
     // Known external IDs for the track.
-    public external_ids: SpotifyExternalIdObject,
+    public external_ids: SpotifyExternalId,
     // Known external URLs for this track.
-    public external_urls: SpotifyExternalUrlObject,
+    public external_urls: SpotifyExternalUrl,
     // A link to the Web API endpoint providing full details of the track.
     public href: string,
     // The Spotify ID for the track.
@@ -39,7 +39,7 @@ export class SpotifyTrackObjectFull {
     // market, and Spotify did not have any tracks to relink it with. The track response will still contain
     // metadata for the original track, and a restrictions object containing the reason why the track is not
     // available: "restrictions" : {"reason" : "market"}
-    public restrictions: SpotifyRestrictionsObject,
+    public restrictions: SpotifyRestriction,
     // The name of the track.
     public name: string,
     // The popularity of the track. The value will be between 0 and 100, with 100 being the most popular.

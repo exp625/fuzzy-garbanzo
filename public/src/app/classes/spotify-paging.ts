@@ -1,4 +1,4 @@
-export class SpotifyPagingObject {
+export class SpotifyPaging {
   constructor(
     // A link to the Web API endpoint returning the full result of the request.
     public href: string,

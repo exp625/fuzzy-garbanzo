@@ -1,9 +1,9 @@
-import {SpotifyExternalUrlObject} from './spotify-external-URL-object';
+import {SpotifyExternalUrl} from './spotify-external-url';
 
-export class SpotifyArtistObjectSimplified {
+export class SpotifyArtistSimplified {
   constructor(
     // Known external URLs for this artist.
-    public external_urls: SpotifyExternalUrlObject,
+    public external_urls: SpotifyExternalUrl,
     // A link to the Web API endpoint providing full details of the artist.
     public href: string,
     // The Spotify ID for the artist.

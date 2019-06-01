@@ -1,4 +1,4 @@
-export class SpotifyImageObject {
+export class SpotifyImage {
   constructor(
     // The image height in pixels. If unknown: null or not returned.
     public height: number,

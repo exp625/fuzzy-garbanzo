@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpEvent, HttpHandler, HttpHeaders} from '@angular/common/http';
-import {SpotifyTrackObjectFull} from '../classes/spotify-track-object-full';
+import {SpotifyTrackFull} from '../classes/spotify-track-full';
 
 @Injectable({
   providedIn: 'root'
@@ -54,10 +54,10 @@ export class SpotifyService {
 
   spotifySearch(text: string) {
     const payload = {'q': text + '*', 'type': 'track', 'market': 'DE'};
-    return this.http.get<SpotifyTrackObjectFull>(this.spotifyWebApi + '/search' + this.jsonToQueryString(payload), {headers: new HttpHeaders({'Authorization': 'Bearer ' + this.authToken})});
+    return this.http.get<SpotifyTrackFull>(this.spotifyWebApi + '/search' + this.jsonToQueryString(payload), {headers: new HttpHeaders({'Authorization': 'Bearer ' + this.authToken})});
   }
 
-  playSong(song: SpotifyTrackObjectFull) {
+  playSong(song: SpotifyTrackFull) {
     const payload = {'uris': [song.uri], 'device_id': ''};
     return this.http.put(this.spotifyConnectApi + '/play', payload, {headers: new HttpHeaders({'Authorization': 'Bearer ' + this.authToken})});
   }

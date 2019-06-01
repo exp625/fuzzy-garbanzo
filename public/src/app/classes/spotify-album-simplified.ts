@@ -1,9 +1,9 @@
-import {SpotifyArtistObjectSimplified} from './spotify-artist-object-simplified';
-import {SpotifyExternalUrlObject} from './spotify-external-URL-object';
-import {SpotifyImageObject} from './spotify-image-object';
-import {SpotifyRestrictionsObject} from './spotify-restrictions-object';
+import {SpotifyArtistSimplified} from './spotify-artist-simplified';
+import {SpotifyExternalUrl} from './spotify-external-url';
+import {SpotifyImage} from './spotify-image';
+import {SpotifyRestriction} from './spotify-restriction';
 
-export class SpotifyAlbumObjectSimplified {
+export class SpotifyAlbumSimplified {
   constructor(
     // The field is present when getting an artist’s albums. Possible values are
     // “album”, “single”, “compilation”, “appears_on”. Compare to album_type this field
@@ -13,19 +13,19 @@ export class SpotifyAlbumObjectSimplified {
     public album_type: string,
     // The artists of the album. Each artist object includes a link in href to more
     // detailed information about the artist.
-    public artists: Array<SpotifyArtistObjectSimplified>,
+    public artists: Array<SpotifyArtistSimplified>,
     // The markets in which the album is available: ISO 3166-1 alpha-2 country codes.
     // Note that an album is considered available in a market when at least 1 of its
     // tracks is available in that market.
     public available_markets: Array<string>,
     // Known external URLs for this album.
-    public external_urls: SpotifyExternalUrlObject,
+    public external_urls: SpotifyExternalUrl,
     // A link to the Web API endpoint providing full details of the album.
     public href: string,
     // The [/documentation/web-api/#spotify-uris-and-ids) for the album.
     public id: string,
     // The cover art for the album in various sizes, widest first.
-    public images: Array<SpotifyImageObject>,
+    public images: Array<SpotifyImage>,
     // The name of the album. In case of an album takedown, the value may be an empty string.
     public name: string,
     // The date the album was first released, for example 1981. Depending on the precision,
@@ -37,7 +37,7 @@ export class SpotifyAlbumObjectSimplified {
     // available in the given market, and Spotify did not have any tracks to relink it with.
     // The track response will still contain metadata for the original track, and a restrictions
     // object containing the reason why the track is not available: "restrictions" : {"reason" : "market"}
-    public restrictions: SpotifyRestrictionsObject,
+    public restrictions: SpotifyRestriction,
     // The object type: “album”
     public type: string,
     // The Spotify URI for the album.

@@ -1,9 +1,9 @@
-import {SpotifyExternalUrlObject} from './spotify-external-URL-object';
+import {SpotifyExternalUrl} from './spotify-external-url';
 
 export class SpotifyTrackLink {
   constructor(
     // Known external URLs for this track.
-    public external_urls: SpotifyExternalUrlObject,
+    public external_urls: SpotifyExternalUrl,
     // A link to the Web API endpoint providing full details of the track.
     public href: string,
     // The Spotify ID for the track.

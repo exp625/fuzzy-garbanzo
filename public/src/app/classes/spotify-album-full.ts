@@ -1,28 +1,28 @@
-import {SpotifyArtistObjectSimplified} from './spotify-artist-object-simplified';
-import {SpotifyCopyrightObject} from './spotify-copyright-object';
-import {SpotifyExternalIdObject} from './spotify-external-ID-object';
-import {SpotifyExternalUrlObject} from './spotify-external-URL-object';
-import {SpotifyImageObject} from './spotify-image-object';
-import {SpotifyPagingObject} from './spotify-paging-object';
-import {SpotifyRestrictionsObject} from './spotify-restrictions-object';
+import {SpotifyArtistSimplified} from './spotify-artist-simplified';
+import {SpotifyCopyright} from './spotify-copyright';
+import {SpotifyExternalId} from './spotify-external-id';
+import {SpotifyExternalUrl} from './spotify-external-url';
+import {SpotifyImage} from './spotify-image';
+import {SpotifyPaging} from './spotify-paging';
+import {SpotifyRestriction} from './spotify-restriction';
 
-export class SpotifyAlbumObjectFull {
+export class SpotifyAlbumFull {
   constructor(
     // The type of the album: one of "album" , "single" , or "compilation".
     public album_type: string,
     // The artists of the album. Each artist object includes a link in href to more detailed information
     // about the artist.
-    public artists: Array<SpotifyArtistObjectSimplified>,
+    public artists: Array<SpotifyArtistSimplified>,
     // The markets in which the album is available: ISO 3166-1 alpha-2 country
     // codes. Note that an album is considered available in a market when at least
     // 1 of its tracks is available in that market.
     public available_markets: Array<string>,
     // The copyright statements of the album.
-    public copyrights: Array<SpotifyCopyrightObject>,
+    public copyrights: Array<SpotifyCopyright>,
     // Known external IDs for the album.
-    public external_ids: SpotifyExternalIdObject,
+    public external_ids: SpotifyExternalId,
     // Known external URLs for this album.
-    public external_urls: SpotifyExternalUrlObject,
+    public external_urls: SpotifyExternalUrl,
     // A list of the genres used to classify the album. For example: "Prog Rock" ,
     // "Post-Grunge". (If not yet classified, the array is empty.)
     public genres: Array<string>,
@@ -31,7 +31,7 @@ export class SpotifyAlbumObjectFull {
     // The Spotify ID for the album.
     public id: string,
     // The cover art for the album in various sizes, widest first.
-    public images: Array<SpotifyImageObject>,
+    public images: Array<SpotifyImage>,
     // The label for the album.
     public label: string,
     // The name of the album. In case of an album takedown, the value may be an empty string.
@@ -48,9 +48,9 @@ export class SpotifyAlbumObjectFull {
     // n the given market, and Spotify did not have any tracks to relink it with.
     // The track response will still contain metadata for the original track, and a restrictions
     // object containing the reason why the track is not available: "restrictions" : {"reason" : "market"}
-    public restrictions: SpotifyRestrictionsObject,
+    public restrictions: SpotifyRestriction,
     // The tracks of the album.
-    public tracks: SpotifyPagingObject,
+    public tracks: SpotifyPaging,
     // The object type: “album”
     public type: string,
     // The Spotify URI for the album.

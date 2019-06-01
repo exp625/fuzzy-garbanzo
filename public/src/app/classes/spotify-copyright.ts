@@ -1,4 +1,4 @@
-export class SpotifyCopyrightObject {
+export class SpotifyCopyright {
   constructor(
     // The copyright text for this album.
     public text: string,

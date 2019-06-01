@@ -1,4 +1,4 @@
-export class SpotifyExternalUrlObject {
+export class SpotifyExternalUrl {
   constructor(
     // The type of the URL, for example:- "spotify" - The Spotify URL for the object.
     public key: string,

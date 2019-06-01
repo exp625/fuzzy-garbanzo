@@ -1,4 +1,4 @@
-export class SpotifyErrorObject {
+export class SpotifyError {
   constructor(
     // The HTTP status code (also returned in the response header; see Response Status Codes for more information).
     public status: number,

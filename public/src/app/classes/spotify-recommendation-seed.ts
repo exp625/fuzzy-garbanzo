@@ -1,4 +1,4 @@
-export class SpotifyRecommendationsSeedObject {
+export class SpotifyRecommendationSeed {
   constructor(
     // The number of tracks available after min_* and max_* filters have been applied.
     public afterFilteringSize: number,

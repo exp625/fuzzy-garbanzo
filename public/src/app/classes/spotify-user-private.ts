@@ -1,8 +1,8 @@
-import {SpotifyImageObject} from './spotify-image-object';
-import {SpotifyFollowersObject} from './spotify-followers-object';
-import {SpotifyExternalUrlObject} from './spotify-external-URL-object';
+import {SpotifyImage} from './spotify-image';
+import {SpotifyFollower} from './spotify-follower';
+import {SpotifyExternalUrl} from './spotify-external-url';
 
-export class SpotifyUserObjectPrivate {
+export class SpotifyUserPrivate {
   constructor(
     // The user’s date-of-birth.This field is only available when the current user has granted access to
     // the user-read-birthdate scope.
@@ -17,15 +17,15 @@ export class SpotifyUserObjectPrivate {
     // available when the current user has granted access to the user-read-email scope.
     public email: string,
     // Known external URLs for this user.
-    public external_urls: SpotifyExternalUrlObject,
+    public external_urls: SpotifyExternalUrl,
     // Information about the followers of the user.
-    public followers: SpotifyFollowersObject,
+    public followers: SpotifyFollower,
     // A link to the Web API endpoint for this user.
     public href: string,
     // The Spotify user ID for the user
     public id: string,
     // The user’s profile image.
-    public images: SpotifyImageObject,
+    public images: SpotifyImage,
     // The user’s Spotify subscription level: “premium”, “free”, etc. (The subscription level “open” can be
     // considered the same as “free”.)This field is only available when the current user has granted access to
     // the user-read-private scope.
