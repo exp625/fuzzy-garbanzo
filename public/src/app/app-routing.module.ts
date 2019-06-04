@@ -2,15 +2,16 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { MainComponent } from './components/main/main.component';
 import {CallbackComponent} from './components/callback/callback.component';
+import {LandingpageComponent} from './components/landingpage/landingpage.component';
 
 const routes: Routes = [
   {
-    path: 'main',
-    component: MainComponent
+    path: 'landingpage',
+    component: LandingpageComponent
   },
   {
     path: '',
-    redirectTo: 'main',
+    redirectTo: 'landingpage',
     pathMatch: 'full'
   },
   {
@@ -18,8 +19,12 @@ const routes: Routes = [
     component: CallbackComponent
   },
   {
+    path: 'main',
+    component: MainComponent
+  },
+  {
     path: '**',
-    redirectTo: 'main'
+    redirectTo: 'landingpage'
   }];
 
 @NgModule({

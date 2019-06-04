@@ -101,3 +101,20 @@ exports.spotifyRefreshToken = function(req, res, next) {
         }
     });
 };
+
+exports.getUserStatus = function (req, res, next) {
+  if(!req.session.user_type) {
+      res.jsonp({"User": "New", "PartyID": ""})
+  } else {
+      if (req.session.user_type === "Guest") {
+          res.jsonp({"User": "Guest", "PartyID": req.session.party_id})
+      }
+      if (req.session.user_type === "Host") {
+          res.jsonp({"User": "Host", "PartyID": req.session.party_id})
+      }
+  }
+
+  next(new Error('Auth Error: Invalid Session'));
+
+
+};

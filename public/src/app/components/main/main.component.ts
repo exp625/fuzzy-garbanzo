@@ -37,21 +37,7 @@ export class MainComponent implements OnInit {
   }
 
   spotifySearch(e) {
-    this.onSearch = true;
-    this.spotifySearchText = e.target.value;
-    if (this.spotifySearchText !== '') {
-      this.spotify.spotifySearch(this.spotifySearchText).subscribe(value => {
-        this.songList = [];
-        value.tracks.items.forEach(song => {
-          this.songList.push(new SpotifyTrackFull(song.name, song.popularity, song.uri, 0, null));
-        });
-        this.songList.sort((a, b) => b.popularity - a.popularity);
 
-
-      });
-    } else {
-      this.clear();
-    }
   }
 
   clear() {

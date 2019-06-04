@@ -17,6 +17,10 @@ router.use(function (req, res, next) {
 
     router.get('/refresh', function (req, res, next) {
         authController.spotifyRefreshToken(req, res, next)
+    });
+
+    router.get('/status', function (req, res, next) {
+        authController.getUserStatus(req, res, next);
     })
 });
 
