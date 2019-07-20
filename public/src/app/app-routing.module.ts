@@ -3,11 +3,17 @@ import { Routes, RouterModule } from '@angular/router';
 import { MainComponent } from './components/main/main.component';
 import {CallbackComponent} from './components/callback/callback.component';
 import {LandingpageComponent} from './components/landingpage/landingpage.component';
+import {LoginGuard} from './services/login.guard';
 
 const routes: Routes = [
   {
     path: 'landingpage',
     component: LandingpageComponent
+  },
+  {
+    path: 'login',
+    canActivate: [LoginGuard],
+    redirectTo: 'landingpage'
   },
   {
     path: '',
@@ -21,10 +27,6 @@ const routes: Routes = [
   {
     path: 'main',
     component: MainComponent
-  },
-  {
-    path: '**',
-    redirectTo: 'landingpage'
   }];
 
 @NgModule({

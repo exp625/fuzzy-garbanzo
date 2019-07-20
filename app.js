@@ -1,5 +1,11 @@
 var express = require('express');
 var app = express();
+var path = require('path');
+
+var logger = require('morgan');
+app.use(logger('dev'));
+var cors = require('cors');
+app.use(cors());
 
 // Session Coockies TODO: Security
 var session = require('express-session');
@@ -17,6 +23,25 @@ app.use('/api/queue', sessionHandler, queue);
 
 var auth = require('./routes/Auth');
 app.use('/auth/', sessionHandler, auth);
+
+const allowedExt = [
+    '.js',
+    '.ico',
+    '.css',
+    '.png',
+    '.jpg',
+    '.woff2',
+    '.woff',
+    '.ttf',
+    '.svg',
+];
+app.get('*', (req, res) => {
+    if (allowedExt.filter(ext => req.url.indexOf(ext) > 0).length > 0) {
+        res.sendFile(path.resolve(`./public/dist/public/${req.url}`));
+    } else {
+        res.sendFile(path.resolve('./public/dist/public/index.html'));
+    }
+});
 
 app.use(function(error, req, res, next) {
     res.json({ message: error.message });

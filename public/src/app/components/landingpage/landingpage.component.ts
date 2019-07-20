@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from '../../services/auth.service';
+import {SpotifyService} from '../../services/spotify.service';
 
 @Component({
   selector: 'app-landingpage',
@@ -11,7 +12,7 @@ export class LandingpageComponent implements OnInit {
   public userStatus = 'New';
   public partyId: number = undefined;
 
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService, private spotify: SpotifyService) { }
 
 
   ngOnInit() {
@@ -29,6 +30,10 @@ export class LandingpageComponent implements OnInit {
         this.userStatus = 'New';
       }
     });
+  }
+
+  login() {
+    this.auth.spotifyLogin().subscribe();
   }
 
 

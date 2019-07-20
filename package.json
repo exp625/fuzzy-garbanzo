@@ -17,9 +17,11 @@
   },
   "homepage": "https://github.com/exp625/fuzzy-garbanzo#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-session": "^1.16.1",
     "memorystore": "^1.6.1",
+    "morgan": "^1.9.1",
     "querystring": "^0.2.0",
     "request": "^2.88.0"
   }

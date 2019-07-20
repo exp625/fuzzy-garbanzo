@@ -15,6 +15,8 @@ exports.auth = function () {
 };
 
 exports.spotifyLogin = function (req, res, next) {
+
+
     res.redirect('https://accounts.spotify.com/authorize?' +
         querystring.stringify({
             response_type: 'code',
@@ -31,6 +33,7 @@ exports.spotifyCallback = function (req, res, next) {
     var code = req.query.code || null;
     var state = req.query.state || null;
     var sess = req.session;
+
 
     console.log("State " +  state);
     console.log("Session ID" + sess.id);
@@ -109,12 +112,11 @@ exports.getUserStatus = function (req, res, next) {
       if (req.session.user_type === "Guest") {
           res.jsonp({"User": "Guest", "PartyID": req.session.party_id})
       }
-      if (req.session.user_type === "Host") {
+      else if (req.session.user_type === "Host") {
           res.jsonp({"User": "Host", "PartyID": req.session.party_id})
       }
   }
 
-  next(new Error('Auth Error: Invalid Session'));
 
 
 };
