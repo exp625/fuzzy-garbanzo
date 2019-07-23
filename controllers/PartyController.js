@@ -108,3 +108,7 @@ exports.vote = function (req, res) {
 
 };
 
+exports.setQueue = function (req, res) {
+
+};
+
