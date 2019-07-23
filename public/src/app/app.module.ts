@@ -9,7 +9,9 @@ import { SpotifyService } from './services/spotify.service';
 import { HttpClientModule } from '@angular/common/http';
 import { CallbackComponent } from './components/callback/callback.component';
 import { LandingpageComponent } from './components/landingpage/landingpage.component';
-  import {AuthService} from './services/auth.service';
+import {AuthService} from './services/auth.service';
+
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,8 @@ import { LandingpageComponent } from './components/landingpage/landingpage.compo
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [SpotifyService, AuthService],
   bootstrap: [AppComponent]

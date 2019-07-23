@@ -90,9 +90,22 @@ exports.getParty = function (label) {
     return party;
 };
 
-exports.createParty = function (req, res) {
+exports.createParty = function (req, res, next) {
     if (req.session.user_type === 'Host' && req.session.spotify_access_token) {
         partyController.generateNewParty(req, res)
+    }
+};
+
+exports.joinParty = function (req, res, next) {
+    const label = req.body.label;
+    try {
+        var party = partyController.getParty(label);
+        req.session.user_type = 'Guest';
+        req.session.label = label;
+        req.session.save()
+        req.jsonp({'label' : label})
+    } catch (e) {
+        next(new Error('Party Error: Could not find a party with the submitted label'))
     }
 };
 

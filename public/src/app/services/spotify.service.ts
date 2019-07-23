@@ -33,6 +33,11 @@ export class SpotifyService {
     return this.http.get<any>('/api/party/create');
   }
 
+  joinParty(label: string) {
+    const payload = {'label': label};
+    return this.http.put<any>('/api/party/join', payload, this.headers);
+  }
+
   setAuthToken(authToken: string) {
 
     this.authToken = authToken;

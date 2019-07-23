@@ -12,6 +12,8 @@ export class LandingpageComponent implements OnInit {
   public userStatus = 'Undefined';
   public userLabel = 'Undefined';
 
+  public labelField = '';
+
   constructor(private auth: AuthService, private spotify: SpotifyService) { }
 
 
@@ -43,7 +45,19 @@ export class LandingpageComponent implements OnInit {
 
   create() {
     this.spotify.createNewParty().subscribe(value => {
-      console.log(value);
+      this.auth.getUserStatus().subscribe(value2 => {
+        this.userStatus = value2.user;
+        this.userLabel = value2.label;
+      });
+    });
+  }
+
+  join() {
+    this.spotify.joinParty(this.labelField).subscribe(value => {
+      this.auth.getUserStatus().subscribe(value2 => {
+        this.userStatus = value2.user;
+        this.userLabel = value2.label;
+      });
     });
   }
 

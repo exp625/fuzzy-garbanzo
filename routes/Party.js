@@ -8,8 +8,14 @@ router.use(function (req, res, next) {
     next();
 
     router.get('/create', function (req, res, next) {
-        partyController.createParty(req, res);
+        partyController.createParty(req, res, next);
     });
+
+    router.put('/join', function (req, res, next) {
+        partyController.joinParty(req, res, next);
+    });
+
+
 
 });
 
