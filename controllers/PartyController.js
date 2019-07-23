@@ -1,8 +1,16 @@
+class Queue{
+
+    constructor(){
+        this.songs = [];
+    }
+}
+
 class Party{
 
     constructor(label, spotify_access_token){
         this.label = label;
         this.spotify_access_token = spotify_access_token;
+        this.queue = new Queue();
     }
 
     getLabel() {
@@ -15,6 +23,10 @@ class Party{
 
     getSelectedDeviceId() {
         return '';
+    }
+
+    getQueue() {
+        return this.queue;
     }
 }
 
@@ -38,7 +50,7 @@ class PartyController{
 
     generateRandomLabel(){
         var text = '';
-        var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        var possible = 'ABCDEFGHJKLMNOPQRSTUVWXYZ123456789';
 
         for (var i = 0; i < 5; i++) {
             text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -86,5 +98,13 @@ exports.createParty = function (req, res) {
 
 exports.getObject = function () {
     return partyController;
-}
+};
+
+exports.getQueue = function (req, res) {
+
+};
+
+exports.vote = function (req, res) {
+
+};
 

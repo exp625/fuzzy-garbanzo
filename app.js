@@ -55,5 +55,8 @@ app.use(function(error, req, res, next) {
 });
 
 app.listen(3000, function () {
+    http.get('http://localhost:3000/api/party/');
+    http.get('http://localhost:3000/auth');
+    http.get('http://localhost:3000/sapi');
     console.log('Example app listening on port 3000!');
 });
