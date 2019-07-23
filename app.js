@@ -21,8 +21,14 @@ var sessionHandler = session({
 var queue = require('./routes/Queue');
 app.use('/api/queue', sessionHandler, queue);
 
+var party = require('./routes/Party');
+app.use('/api/party', sessionHandler, party);
+
 var auth = require('./routes/Auth');
 app.use('/auth/', sessionHandler, auth);
+
+var spotify = require('./routes/Spotify');
+app.use('/sapi/', sessionHandler, spotify);
 
 const allowedExt = [
     '.js',

@@ -10,26 +10,20 @@ import {SpotifyTrackFull} from '../classes/spotify-track-full';
 export class SpotifyService {
 
   private authToken: string = null;
-  private clientId = '18e9faedbb4b4e6c857a891d10a6ead3';
-  private redirect = 'http://localhost:4200/callback';
+  private redirect = 'http://localhost:3000/callback';
   private scope = 'user-read-private user-read-email user-modify-playback-state';
   private spotifyConnectApi = 'https://api.spotify.com/v1/me/player';
   private spotifyWebApi = 'https://api.spotify.com/v1';
 
   constructor(private http: HttpClient) {
-    if (!sessionStorage.getItem('authToken')) {
-      sessionStorage.setItem('authToken', 'temp');
-      this.login();
-    }
-    this.authToken = sessionStorage.getItem('authToken');
   }
 
 
   login() {
-    window.location.href = 'https://accounts.spotify.com/authorize?client_id=' + this.clientId
-      + '&redirect_uri=' + this.redirect
-      + '&scope=' + this.scope
-      + '&response_type=token';
+  }
+
+  createNewParty() {
+    return this.http.get<any>('/api/party/create');
   }
 
   setAuthToken(authToken: string) {

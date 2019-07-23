@@ -17,7 +17,7 @@ export class AuthService {
   }
 
   spotifyLogin() {
-    return this.http.get(this.authUrl + '/login/', {headers: new HttpHeaders({'Access-Control-Allow-Origin': 'https://accounts.spotify.com'})});
+    return this.http.get<any>(this.authUrl + '/login/');
   }
 
 

@@ -17,7 +17,7 @@
   <div class="row">
     <div class="col-2 offset-5">
       <button class="btn btn-primary btn-block my-4" *ngIf="userStatus !== 'Host'" (click)="login()">Login to Spotify</button>
-      <button class="btn btn-primary btn-block my-4" *ngIf="userStatus === 'Host'">Login to Spotify</button>
+      <button class="btn btn-primary btn-block my-4" *ngIf="userStatus === 'Host'" (click)="create()">Create new Jam Sesseion</button>
     </div>
   </div>
   <hr>
@@ -26,7 +26,6 @@
 <h5>Debug information:</h5>
 <b>User Status: </b><span class="text-primary">{{userStatus}}</span><br>
 <b>Linked Label: </b><span class="text-primary">{{userLabel}}</span><br>
-<b>Spotify Auth Token: </b><span class="text-primary">{{spotifyAuthToken}}</span><br>
 
 
 

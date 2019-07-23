@@ -3,8 +3,7 @@ var request = require('request');
 
 var session = require('express-session');
 
-var spotify_app_scope = '';
-
+var spotify_app_scope = 'user-read-private user-read-email user-modify-playback-state';
 var redirect_uri = process.env.REDIRECT_URI;
 var spotify_client_id = process.env.SPOTIFY_CLIENT_ID;
 var spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET;
@@ -16,7 +15,8 @@ exports.auth = function () {
 
 exports.spotifyLogin = function (req, res, next) {
 
-
+    // Doest not work due to CORS
+    /*
     res.redirect('https://accounts.spotify.com/authorize?' +
         querystring.stringify({
             response_type: 'code',
@@ -25,6 +25,14 @@ exports.spotifyLogin = function (req, res, next) {
             redirect_uri: redirect_uri,
             state: req.session.id
         }));
+     */
+    res.jsonp({'url': 'https://accounts.spotify.com/authorize?' +
+            querystring.stringify({
+                response_type: 'code',
+                client_id: spotify_client_id,
+                scope: spotify_app_scope,
+                redirect_uri: redirect_uri,
+                state: req.session.id})});
 };
 
 exports.spotifyCallback = function (req, res, next) {
@@ -64,12 +72,15 @@ exports.spotifyCallback = function (req, res, next) {
 
 
             // we can also pass the token to the browser to make requests from there
+            /*
             res.redirect('/login/' +
                 querystring.stringify({
                     access_token: body.access_token,
                     refresh_token: body.refresh_token,
                     user_type: 'Host'
                 }));
+                */
+            res.redirect('/landingpage');
         } else {
             next(new Error('Spotify Auth: Invalid Token'));
         }
@@ -107,13 +118,13 @@ exports.spotifyRefreshToken = function(req, res, next) {
 
 exports.getUserStatus = function (req, res, next) {
   if(!req.session.user_type) {
-      res.jsonp({"User": "New", "PartyID": ""})
+      res.jsonp({"user": "New", "label": ""})
   } else {
       if (req.session.user_type === "Guest") {
-          res.jsonp({"User": "Guest", "PartyID": req.session.party_id})
+          res.jsonp({"user": "Guest", "label": req.session.label})
       }
       else if (req.session.user_type === "Host") {
-          res.jsonp({"User": "Host", "PartyID": req.session.party_id})
+          res.jsonp({"user": "Host", "label": req.session.label})
       }
   }
 

@@ -9,22 +9,22 @@ import {SpotifyService} from '../../services/spotify.service';
 })
 export class LandingpageComponent implements OnInit {
 
-  public userStatus = 'New';
-  public partyId: number = undefined;
+  public userStatus = 'Undefined';
+  public userLabel = 'Undefined';
 
   constructor(private auth: AuthService, private spotify: SpotifyService) { }
 
 
   ngOnInit() {
     this.auth.getUserStatus().subscribe(value => {
-      if (value.User !== 'New') {
-        if (value.User === 'Guest') {
+      if (value.user !== 'New') {
+        if (value.user === 'Guest') {
           this.userStatus = 'Guest';
-          this.partyId = value.PartyID;
+          this.userLabel = value.label;
         }
-        if (value.User === 'Host') {
+        if (value.user === 'Host') {
           this.userStatus = 'Host';
-          this.partyId = value.PartyID;
+          this.userLabel = value.label;
         }
       } else {
         this.userStatus = 'New';
@@ -33,7 +33,18 @@ export class LandingpageComponent implements OnInit {
   }
 
   login() {
-    this.auth.spotifyLogin().subscribe();
+    // Does not work due to CORS
+    // this.auth.spotifyLogin().subscribe();
+
+    this.auth.spotifyLogin().subscribe(value => {
+      window.location.href = value.url;
+    });
+  }
+
+  create() {
+    this.spotify.createNewParty().subscribe(value => {
+      console.log(value);
+    });
   }
 
 
