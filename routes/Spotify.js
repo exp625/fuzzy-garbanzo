@@ -7,21 +7,18 @@ router.use(function (req, res, next) {
 
     next();
 
-    router.get('/play', function (req, res, next) {
+    router.put('/play', function (req, res, next) {
         authController.spotifyStartPlayback(req, res, next);
     });
 
-    router.get('/stop', function (req, res, next) {
+    router.get('/pause', function (req, res, next) {
         authController.spotifyStopPlayback(req, res, next);
     });
 
-    router.get('/search', function (req, res, next) {
+    router.put('/search', function (req, res, next) {
         authController.spotifySearch(req, res, next)
     });
 
-    router.get('/play', function (req, res, next) {
-        authController.spotifyPlaySong(req, res, next);
-    })
 });
 
 module.exports = router;

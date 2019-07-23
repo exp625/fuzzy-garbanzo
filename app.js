@@ -6,6 +6,7 @@ var logger = require('morgan');
 app.use(logger('dev'));
 var cors = require('cors');
 app.use(cors());
+app.use(express.json());
 
 // Session Coockies TODO: Security
 var session = require('express-session');

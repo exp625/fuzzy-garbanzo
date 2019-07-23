@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpEvent, HttpHandler, HttpHeaders} from '@angular/common/http';
 import {SpotifyTrackFull} from '../classes/spotify-track-full';
+import {SpotifyPaging} from "../classes/spotify-paging";
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,14 @@ export class SpotifyService {
   private authToken: string = null;
   private redirect = 'http://localhost:3000/callback';
   private scope = 'user-read-private user-read-email user-modify-playback-state';
-  private spotifyConnectApi = 'https://api.spotify.com/v1/me/player';
+  private uri = '/sapi';
   private spotifyWebApi = 'https://api.spotify.com/v1';
+
+  private headers = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+    })
+  };
 
   constructor(private http: HttpClient) {
   }
@@ -37,31 +44,22 @@ export class SpotifyService {
   }
 
   pause() {
-    const payload = {'device_id': ''};
-    return this.http.put(this.spotifyConnectApi + '/pause', payload, {headers: new HttpHeaders({'Authorization': 'Bearer ' + this.authToken})});
+    return this.http.get(this.uri + '/pause');
   }
 
   play() {
-    const payload = {'device_id': ''};
-    return this.http.put(this.spotifyConnectApi + '/play', payload, {headers: new HttpHeaders({'Authorization': 'Bearer ' + this.authToken})});
+    return this.http.put(this.uri + '/play', undefined);
   }
 
   spotifySearch(text: string) {
-    const payload = {'q': text + '*', 'type': 'track', 'market': 'DE'};
-    return this.http.get<SpotifyTrackFull>(this.spotifyWebApi + '/search' + this.jsonToQueryString(payload), {headers: new HttpHeaders({'Authorization': 'Bearer ' + this.authToken})});
+    const payload = {'text': text};
+    return this.http.put<any>(this.uri + '/search', payload, this.headers);
   }
 
   playSong(song: SpotifyTrackFull) {
-    const payload = {'uris': [song.uri], 'device_id': ''};
-    return this.http.put(this.spotifyConnectApi + '/play', payload, {headers: new HttpHeaders({'Authorization': 'Bearer ' + this.authToken})});
+    return this.http.put(this.uri + '/play', song, this.headers);
   }
 
-  jsonToQueryString(json) {
-    return '?' +
-      Object.keys(json).map(function (key) {
-        return encodeURIComponent(key) + '=' +
-          encodeURIComponent(json[key]);
-      }).join('&');
-  }
+
 
 }

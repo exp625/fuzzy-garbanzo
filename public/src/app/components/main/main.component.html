@@ -20,10 +20,6 @@
 <table class="table">
   <tbody>
     <tr class="table-active" *ngIf="!onSearch && songList.length !== 0">
-      <th scope="row">{{currentSong.name}}</th>
-      <td>
-        <i class="material-icons md-48">play_circle_filled_white</i>
-     </td>
     </tr>
     <tr *ngFor="let song of songList">
       <th scope="row">{{song.name}} + {{song.popularity}}</th>

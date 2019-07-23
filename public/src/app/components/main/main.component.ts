@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SpotifyService} from '../../services/spotify.service';
 import {SpotifyTrackFull} from '../../classes/spotify-track-full';
+import {SpotifyPaging} from "../../classes/spotify-paging";
 
 @Component({
   selector: 'app-main',
@@ -9,7 +10,7 @@ import {SpotifyTrackFull} from '../../classes/spotify-track-full';
 })
 export class MainComponent implements OnInit {
 
-  public pauseButtonFlag = false;
+  public pauseButtonFlag = true;
 
   public currentSong: SpotifyTrackFull = undefined;
   public songList: SpotifyTrackFull[] = [];
@@ -19,9 +20,7 @@ export class MainComponent implements OnInit {
   constructor(private spotify: SpotifyService) { }
 
   ngOnInit() {
-    if (this.spotify.getAuthToken()) {
-      this.pauseButtonFlag = true;
-    }
+
   }
 
   test () {
@@ -37,7 +36,13 @@ export class MainComponent implements OnInit {
   }
 
   spotifySearch(e) {
-
+    this.spotify.spotifySearch(e.target.value).subscribe(value => {
+      console.log(value.tracks);
+      const page = value.tracks as SpotifyPaging;
+      console.log(page);
+      this.songList = page.items as SpotifyTrackFull[];
+      console.log(this.songList);
+    });
   }
 
   clear() {
