@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CallbackComponent } from './callback.component';
+import { JamSessionQueueComponent } from './jam-session-queue.component';
 
-describe('CallbackComponent', () => {
-  let component: CallbackComponent;
-  let fixture: ComponentFixture<CallbackComponent>;
+describe('JamSessionQueueComponent', () => {
+  let component: JamSessionQueueComponent;
+  let fixture: ComponentFixture<JamSessionQueueComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CallbackComponent ]
+      declarations: [ JamSessionQueueComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CallbackComponent);
+    fixture = TestBed.createComponent(JamSessionQueueComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

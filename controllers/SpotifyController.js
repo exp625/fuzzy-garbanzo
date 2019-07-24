@@ -131,6 +131,68 @@ exports.spotifyPlaySong = function (req, res, next) {
 
 };
 
+exports.spotifyPlayerInfo = function (req, res, next) {
+    if (req.session.label) {
+        try {
+            var party = partyController.getParty(req.session.label);
+            var spotify_access_token = party.getSpotifyAccessToken();
+            var device_id = party.getSelectedDeviceId();
+        } catch (e) {
+            next(new Error('Party Error: Could not find Party with your label'));
+            return;
+        }
+    } else {
+        next(new Error('Party Error: Could not find a selected label'));
+        return;
+    }
+    const payload = {'uris': [req.body.uri]};
+    const options = {
+        url: spotify_connect_uri + '/play',
+        headers: { 'Authorization': 'Bearer ' + spotify_access_token },
+        body: payload,
+        json: true
+    };
+    request.get(options, function (error, response, body) {
+        if (!error) {
+            res.send(body)
+        } else {
+            next(new Error('Spotify Error: Could not call the Spotify Api'));
+        }
+    })
+
+};
+
+exports.spotifyDeviceIds = function (req, res, next) {
+    if (req.session.label) {
+        try {
+            var party = partyController.getParty(req.session.label);
+            var spotify_access_token = party.getSpotifyAccessToken();
+            var device_id = party.getSelectedDeviceId();
+        } catch (e) {
+            next(new Error('Party Error: Could not find Party with your label'));
+            return;
+        }
+    } else {
+        next(new Error('Party Error: Could not find a selected label'));
+        return;
+    }
+    const payload = {'uris': [req.body.uri]};
+    const options = {
+        url: spotify_connect_uri + '/play',
+        headers: { 'Authorization': 'Bearer ' + spotify_access_token },
+        body: payload,
+        json: true
+    };
+    request.get(options, function (error, response, body) {
+        if (!error) {
+            res.send(body)
+        } else {
+            next(new Error('Spotify Error: Could not call the Spotify Api'));
+        }
+    })
+
+};
+
 function jsonToQueryString(json) {
     return '?' +
         Object.keys(json).map(function (key) {
