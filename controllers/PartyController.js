@@ -1,7 +1,93 @@
+class QueueSong{
+
+    constructor(SpotifyTrackFull) {
+        this.spotifyTrackFull = SpotifyTrackFull;
+        this.votes = [];
+        this.date = Date.now();
+    }
+
+    getVoteCount() {
+        return this.votes.length;
+    }
+
+    getDate() {
+        return this.date;
+    }
+
+    getSpotifyTrackFull() {
+        return this.spotifyTrackFull;
+    }
+
+    vote(id) {
+        if (this.votes[this.votes.indexOf(id)]) {
+            // The id has already voted for the song. Another vote will remove the current vote
+            this.votes = this.votes.filter(value => {
+                return !(value === id);
+            });
+        } else {
+            // The id has currently not voted for the song. Add the vote
+            this.votes.push(id);
+        }
+    }
+
+    getObjectWithoutId() {
+        return {'spotifyTrackFull': this.spotifyTrackFull, 'votes': this.getVoteCount()};
+    }
+}
+
 class Queue{
 
-    constructor(){
+    constructor() {
         this.songs = [];
+    }
+
+    vote(id, spotifyTrackFull) {
+        let notInQueueFlag = true;
+        this.songs.forEach(song => {
+            if (song.getSpotifyTrackFull().uri === spotifyTrackFull.uri) {
+                song.vote(id);
+                notInQueueFlag = false;
+            }
+        });
+
+        if (notInQueueFlag) {
+            let newSong = new QueueSong(spotifyTrackFull);
+            newSong.vote(id);
+            this.songs.push(newSong);
+        }
+
+        this.checkForEmptySongs();
+        this.sortQueue();
+    }
+
+    checkForEmptySongs () {
+        this.songs = this.songs.filter(song => {
+            return song.getVoteCount() > 0;
+        });
+    }
+
+    sortQueue() {
+        this.songs.sort((a, b) => {
+            if (a.getVoteCount() > b.getVoteCount()) return 1;
+            if (a.getVoteCount() < b.getVoteCount()) return -1;
+            if (a.getDate() > b.getDate()) return 1;
+            if (a.getDate() < b.getDate()) return -1;
+            return 0;
+        });
+    }
+
+    getNextSong(remove) {
+        if (remove) {
+            return this.songs.shift()
+        } else {
+            return this.songs[0];
+        }
+    }
+
+    getObjectWithoutId() {
+        return this.songs.map(song => {
+            return song.getObjectWithoutId();
+        });
     }
 }
 
@@ -29,7 +115,6 @@ class Party{
         return this.queue;
     }
 }
-
 
 class PartyController{
 
@@ -102,26 +187,41 @@ exports.joinParty = function (req, res, next) {
         var party = partyController.getParty(label);
         req.session.user_type = 'Guest';
         req.session.label = label;
-        req.session.save()
+        req.session.save();
         req.jsonp({'label' : label})
     } catch (e) {
         next(new Error('Party Error: Could not find a party with the submitted label'))
     }
 };
 
-exports.getObject = function () {
-    return partyController;
+exports.getQueue = function (req, res, next) {
+    const label = req.session.label;
+    try {
+        const party = partyController.getParty(label);
+        const queue = party.getQueue();
+        res.send(queue.getObjectWithoutId());
+    } catch (e) {
+        next(new Error('Party Error: Could not find a party with the submitted label'))
+    }
+
 };
 
-exports.getQueue = function (req, res) {
+exports.vote = function (req, res, next) {
+    const label = req.session.label;
+    const id = req.session.id;
+    try {
+        const party = partyController.getParty(label);
+        const queue = party.getQueue();
+        const spotifyTrackFull = req.body;
+        queue.vote(id, spotifyTrackFull);
+        res.send(queue.getObjectWithoutId());
+    } catch (e) {
+        next(new Error('Party Error: Could not find a party with the submitted label'))
+    }
 
 };
 
-exports.vote = function (req, res) {
-
-};
-
-exports.setQueue = function (req, res) {
+exports.setQueue = function (req, res, next) {
 
 };
 

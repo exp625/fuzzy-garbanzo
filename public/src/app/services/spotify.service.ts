@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpEvent, HttpHandler, HttpHeaders} from '@angular/common/http';
 import {SpotifyTrackFull} from '../classes/spotify-track-full';
 import {SpotifyPaging} from "../classes/spotify-paging";
+import {QueueSong} from '../classes/queue-song';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,14 @@ export class SpotifyService {
   joinParty(label: string) {
     const payload = {'label': label};
     return this.http.put<any>('/api/party/join', payload, this.headers);
+  }
+
+  getQueue() {
+    return this.http.get<QueueSong[]>('/api/party/queue');
+  }
+
+  vote(spotifyTrackFull: SpotifyTrackFull) {
+    return this.http.put<QueueSong[]>('/api/party/vote', spotifyTrackFull, this.headers);
   }
 
   setAuthToken(authToken: string) {

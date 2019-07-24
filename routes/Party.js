@@ -15,7 +15,13 @@ router.use(function (req, res, next) {
         partyController.joinParty(req, res, next);
     });
 
+    router.get('/queue', function (req, res, next) {
+        partyController.getQueue(req, res, next);
+    });
 
+    router.put('/vote', function (req, res, next) {
+        partyController.vote(req, res, next);
+    });
 
 });
 

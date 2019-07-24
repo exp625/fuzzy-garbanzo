@@ -22,7 +22,7 @@
     <tr class="table-active" *ngIf="!onSearch && songList.length !== 0">
     </tr>
     <tr *ngFor="let song of songList">
-      <th scope="row">{{song.name}} + {{song.popularity}}</th>
+      <th scope="row">{{song.spotifyTrackFull.name}} [Votes: {{song.votes}}]</th>
       <td>
         <a (click)="playSong(song)" href="javascript:void(0);">
           <i class="material-icons md-48">play_circle_filled_white</i>
