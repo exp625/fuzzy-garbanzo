@@ -37,9 +37,9 @@ export class LandingpageComponent implements OnInit {
   }
 
   checkForRedirect() {
-    if (this.userStatus === 'Host' || this.userStatus === 'Guest' && this.userLabel !== '') {
-      this.router.navigate(['/' + this.userLabel]);
-    }
+    //if (this.userStatus === 'Host' || this.userStatus === 'Guest' && this.userLabel !== '') {
+    //  this.router.navigate(['/' + this.userLabel]);
+    //}
   }
 
   login() {
