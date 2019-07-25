@@ -232,11 +232,12 @@ exports.setQueue = function (req, res, next) {
 };
 
 exports.socketAuth = function (handshakeData, accept) {
-    console.log(handshakeData.session.user);
+    console.log(handshakeData.session.user_type);
     console.log(handshakeData.session.label);
 
-  if (handshakeData.session.user === 'Host' || handshakeData.session.user === 'Guest') {
+  if (handshakeData.session.user_type === 'Host' || handshakeData.session.user_type === 'Guest') {
       if (partyController.getParty(handshakeData.session.label)) {
+          console.log("Accept Connection");
           accept(null, true);
       } else {
           return accept('Label is invalid.', false);
@@ -249,7 +250,7 @@ exports.socketAuth = function (handshakeData, accept) {
 
 exports.socketConnect = function (socket) {
     console.log("Someone connected");
-    var label = socket.handshake.session.label;
+    var label = socket.handshake.label;
     socket.join(label);
 };
 

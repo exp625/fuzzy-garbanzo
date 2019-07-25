@@ -1,6 +1,8 @@
 var express = require('express');
 var app = express();
-var http = require('http').Server(app);
+var server = require('http').Server(app);
+var http = require('http');
+var io = require('socket.io')(server);
 
 var path = require('path');
 var logger = require('morgan');
@@ -23,19 +25,12 @@ var sessionHandler = session({
 });
 
 // Socket.io
-var io = require('socket.io')(http);
-var sharedsession = require("express-socket.io-session");
-io.use(sharedsession(session, {
-    autoSave: true
-}));
-
-//io.set('authorization', partyController.socketAuth);
-//io.on('connection', partyController.socketConnect);
-io.on('connection', function (socket) {
-    socket.on('my other event', function (data) {
-        console.log(data);
-    });
+io.use(function(socket, next) {
+    sessionHandler(socket.request, socket.request.res, next);
 });
+io.set('authorization', partyController.socketAuth);
+io.on('connection', partyController.socketConnect);
+
 partyController.setSocket(io);
 
 
@@ -74,6 +69,10 @@ app.use(function(error, req, res, next) {
     res.json({ message: error.message });
 });
 
-http.listen(3000, () => {
+server.listen(3000, () => {
+    http.get('http://localhost:3000/api/queue');
+    http.get('http://localhost:3000/api/party');
+    http.get('http://localhost:3000/api/spotify');
+    http.get('http://localhost:3000/api/auth');
     console.log('Jam Factory running on port 3000!');
 });

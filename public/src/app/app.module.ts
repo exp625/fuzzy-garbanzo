@@ -17,7 +17,7 @@ import { JamSessionComponent } from './components/jam-session/jam-session.compon
 import { JamSessionSidebarComponent } from './components/jam-session-sidebar/jam-session-sidebar.component';
 import { JamSessionQueueComponent } from './components/jam-session-queue/jam-session-queue.component';
 
-const config: SocketIoConfig = { url: 'http://localhost:3000/', options: {}};
+const config: SocketIoConfig = { url: 'http://localhost:3000', options: {}};
 
 @NgModule({
   declarations: [
