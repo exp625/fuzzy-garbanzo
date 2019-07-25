@@ -6,13 +6,24 @@
 </form>
 
 <ul class="list-group">
+  <li class="list-group-item d-flex align-items-center justify-content-between" *ngIf="currentSong !== undefined">
+    Currently playing
+  </li>
   <li class="list-group-item d-flex align-items-center justify-content-between active" *ngIf="currentSong !== undefined">
     <img [src]="currentSong.spotifyTrackFull.album.images[2].url" width="64" height="64">
     {{currentSong.spotifyTrackFull.name}}
     <button *ngIf="playbackState.is_playing" (click)="playback(false)" class="btn btn-primary">Stop</button>
     <button *ngIf="!playbackState.is_playing" (click)="playback(true)" class="btn btn-primary">Play</button>
   </li>
+</ul>
 
+<ul class="list-group my-3">
+  <li class="list-group-item d-flex align-items-center justify-content-between" *ngIf="onSearch === true">
+    Search results
+  </li>
+  <li class="list-group-item d-flex align-items-center justify-content-between" *ngIf="onSearch === false">
+    Current Queue
+  </li>
   <li class="list-group-item d-flex align-items-center justify-content-between" *ngFor="let song of songList">
     <img [src]="song.spotifyTrackFull.album.images[2].url" width="64" height="64">
     {{song.spotifyTrackFull.name}}
