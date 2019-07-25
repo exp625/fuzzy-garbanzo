@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {SpotifyService} from '../../services/spotify.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-landingpage',
@@ -14,7 +15,7 @@ export class LandingpageComponent implements OnInit {
 
   public labelField = '';
 
-  constructor(private auth: AuthService, private spotify: SpotifyService) { }
+  constructor(private auth: AuthService, private spotify: SpotifyService, private router: Router) { }
 
 
   ngOnInit() {
@@ -31,7 +32,14 @@ export class LandingpageComponent implements OnInit {
       } else {
         this.userStatus = 'New';
       }
+      this.checkForRedirect();
     });
+  }
+
+  checkForRedirect() {
+    if (this.userStatus === 'Host' || this.userStatus === 'Guest' && this.userLabel !== '') {
+      this.router.navigate(['/' + this.userLabel]);
+    }
   }
 
   login() {
@@ -48,6 +56,7 @@ export class LandingpageComponent implements OnInit {
       this.auth.getUserStatus().subscribe(value2 => {
         this.userStatus = value2.user;
         this.userLabel = value2.label;
+        this.checkForRedirect();
       });
     });
   }
@@ -57,6 +66,7 @@ export class LandingpageComponent implements OnInit {
       this.auth.getUserStatus().subscribe(value2 => {
         this.userStatus = value2.user;
         this.userLabel = value2.label;
+        this.checkForRedirect();
       });
     });
   }

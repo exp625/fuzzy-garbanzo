@@ -5,12 +5,17 @@ import {LandingpageComponent} from './components/landingpage/landingpage.compone
 
 const routes: Routes = [
   {
-    path: 'session',
+    path: '',
+    component: LandingpageComponent,
+    pathMatch: 'full'
+  },
+  {
+    path: ':jamlabel',
     component: JamSessionComponent
   },
   {
-    path: 'landingpage',
-    component: LandingpageComponent
+    path: '*',
+    redirectTo: ''
   }
   ];
 
