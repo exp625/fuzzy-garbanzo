@@ -93,10 +93,11 @@ class Queue{
 
 class Party{
 
-    constructor(label, spotify_access_token){
+    constructor(label, spotify_access_token, socket){
         this.label = label;
         this.spotify_access_token = spotify_access_token;
         this.queue = new Queue();
+        this.socket = socket;
     }
 
     getLabel() {
@@ -121,11 +122,12 @@ class PartyController{
     constructor() {
         this.partys = [];
         this.count = 0;
+        this.socket = undefined;
 
     }
 
     generateNewParty(req, res) {
-        var party = new Party(this.generateRandomLabel(), req.session.spotify_access_token);
+        var party = new Party(this.generateRandomLabel(), req.session.spotify_access_token, this.socket);
         console.log(party);
         req.session.label = party.getLabel();
         req.session.save();
@@ -162,6 +164,10 @@ class PartyController{
         });
 
         return party;
+    }
+
+    setSocket(partySocket){
+        this.socket = partySocket;
     }
 
 
@@ -225,3 +231,28 @@ exports.setQueue = function (req, res, next) {
 
 };
 
+exports.socketAuth = function (handshakeData, accept) {
+    console.log(handshakeData.session.user);
+    console.log(handshakeData.session.label);
+
+  if (handshakeData.session.user === 'Host' || handshakeData.session.user === 'Guest') {
+      if (partyController.getParty(handshakeData.session.label)) {
+          accept(null, true);
+      } else {
+          return accept('Label is invalid.', false);
+      }
+  } else {
+      return accept('Wrong user type', false);
+
+  }
+};
+
+exports.socketConnect = function (socket) {
+    console.log("Someone connected");
+    var label = socket.handshake.session.label;
+    socket.join(label);
+};
+
+exports.setSocket = function (socket) {
+    partyController.setSocket(socket);
+};

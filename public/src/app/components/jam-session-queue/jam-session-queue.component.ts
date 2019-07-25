@@ -3,6 +3,8 @@ import {SpotifyTrackFull} from '../../classes/spotify-track-full';
 import {QueueSong} from '../../classes/queue-song';
 import {SpotifyService} from '../../services/spotify.service';
 import {SpotifyPaging} from '../../classes/spotify-paging';
+import {Socket} from 'ngx-socket-io';
+
 
 @Component({
   selector: 'app-jam-session-queue',
@@ -20,10 +22,11 @@ export class JamSessionQueueComponent implements OnInit {
   public onSearch = false;
   public spotifySearchText = '';
 
-  constructor(private spotify: SpotifyService) { }
+  constructor(private spotify: SpotifyService, private socket: Socket) { }
 
   ngOnInit() {
     this.getQueue();
+    this.socket.emit('message', 'hellloworld');
   }
 
   test () {

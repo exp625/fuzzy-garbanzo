@@ -10,10 +10,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { LandingpageComponent } from './components/landingpage/landingpage.component';
 import {AuthService} from './services/auth.service';
 
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+
 import {FormsModule} from '@angular/forms';
 import { JamSessionComponent } from './components/jam-session/jam-session.component';
 import { JamSessionSidebarComponent } from './components/jam-session-sidebar/jam-session-sidebar.component';
 import { JamSessionQueueComponent } from './components/jam-session-queue/jam-session-queue.component';
+
+const config: SocketIoConfig = { url: 'http://localhost:3000', options: {}};
 
 @NgModule({
   declarations: [
@@ -28,7 +32,8 @@ import { JamSessionQueueComponent } from './components/jam-session-queue/jam-ses
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    SocketIoModule.forRoot(config)
   ],
   providers: [SpotifyService, AuthService],
   bootstrap: [AppComponent]

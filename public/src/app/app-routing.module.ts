@@ -5,14 +5,14 @@ import {LandingpageComponent} from './components/landingpage/landingpage.compone
 
 const routes: Routes = [
   {
-    path: '',
-    component: LandingpageComponent,
-    pathMatch: 'full'
-  },
-  {
     path: 'session',
     component: JamSessionComponent
-  }];
+  },
+  {
+    path: 'landingpage',
+    component: LandingpageComponent
+  }
+  ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
