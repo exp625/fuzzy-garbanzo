@@ -1,4 +1,4 @@
-<nav id="sidebar">
+<nav id="sidebar" style="padding-right: 20px">
   <div class="sidebar-header">
     <h3>Jam Session</h3>
     <h3>{{userStatus.label}}</h3>
@@ -23,6 +23,6 @@
     <button class="btn btn-primary btn-block" (click)="saveSettings()">Update Settings</button>
     <hr>
   </form>
-
+  <button class="btn btn-danger btn-block my-3" (click)="join()">Leave Party</button>
 </nav>
-<button class="btn btn-danger btn-block my-3" (click)="join()">Leave Party</button>
+

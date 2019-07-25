@@ -1,21 +1,22 @@
 <form>
-  <div class="form-group row">
+  <div class="form-group row" style="margin-left: 0px">
     <input type="text" class="form-control col" id="spotifySearchText" placeholder="Search for your favourite Tracks" (keyup)="spotifySearch($event)">
     <button class="btn btn-primary mx-3" (click)="clear()">Clear</button>
   </div>
 </form>
 
 <ul class="list-group">
-  <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="currentSong !== undefined">
+  <li class="list-group-item d-flex align-items-center justify-content-between active" *ngIf="currentSong !== undefined">
+    <img [src]="currentSong.spotifyTrackFull.album.images[2].url" width="64" height="64">
     {{currentSong.spotifyTrackFull.name}}
     <button *ngIf="playbackState.is_playing" (click)="playback(false)" class="btn btn-primary">Stop</button>
     <button *ngIf="!playbackState.is_playing" (click)="playback(true)" class="btn btn-primary">Play</button>
   </li>
 
-  <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let song of songList">
+  <li class="list-group-item d-flex align-items-center justify-content-between" *ngFor="let song of songList">
     <img [src]="song.spotifyTrackFull.album.images[2].url" width="64" height="64">
     {{song.spotifyTrackFull.name}}
-    <button (click)="vote(song)" class="btn btn-primary justify-content-end">Vote</button>
+    <button (click)="vote(song)" class="btn btn-primary ">Vote</button>
     <span class="badge badge-primary badge-pill">{{song.votes}}</span>
   </li>
 
