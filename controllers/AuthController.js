@@ -3,7 +3,7 @@ var request = require('request');
 
 var session = require('express-session');
 
-var spotify_app_scope = 'user-read-private user-read-email user-modify-playback-state';
+var spotify_app_scope = 'user-read-private user-read-email user-modify-playback-state user-read-playback-state';
 var redirect_uri = process.env.REDIRECT_URI;
 var spotify_client_id = process.env.SPOTIFY_CLIENT_ID;
 var spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET;
@@ -80,7 +80,7 @@ exports.spotifyCallback = function (req, res, next) {
                     user_type: 'Host'
                 }));
                 */
-            res.redirect('/landingpage');
+            res.redirect('/');
         } else {
             next(new Error('Spotify Auth: Invalid Token'));
         }

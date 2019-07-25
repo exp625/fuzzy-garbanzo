@@ -1,3 +1,5 @@
+var request = require('request');
+
 class QueueSong{
 
     constructor(SpotifyTrackFull) {
@@ -98,6 +100,8 @@ class Party{
         this.spotify_access_token = spotify_access_token;
         this.queue = new Queue();
         this.socket = socket;
+        this.currentSong = undefined;
+        this.playbackState = true;
     }
 
     getLabel() {
@@ -115,6 +119,29 @@ class Party{
     getQueue() {
         return this.queue;
     }
+
+    getCurrentSong() {
+        return this.currentSong;
+    }
+
+    startNextSong () {
+        console.log("Start Next Song");
+        this.currentSong = this.queue.getNextSong(true);
+        if (this.currentSong) {
+            const query = {'device_id': this.getSelectedDeviceId()};
+            let payload = {'uris': [this.currentSong.getSpotifyTrackFull().uri]};
+
+            const options = {
+                url: 'https://api.spotify.com/v1/me/player/play',
+                headers: {'Authorization': 'Bearer ' + this.spotify_access_token},
+                body: payload,
+                json: true
+            };
+            request.put(options, function (error, response, body) {
+                console.log("Started New Song");
+            });
+        }
+    }
 }
 
 class PartyController{
@@ -123,6 +150,9 @@ class PartyController{
         this.partys = [];
         this.count = 0;
         this.socket = undefined;
+        setInterval(() => {
+            this.queueWorker()
+        }, 1000);
 
     }
 
@@ -168,6 +198,28 @@ class PartyController{
 
     setSocket(partySocket){
         this.socket = partySocket;
+    }
+
+    queueWorker() {
+        console.log("Queue Worker");
+        this.partys.forEach(party => {
+            const options = {
+                url: 'https://api.spotify.com/v1/me/player',
+                headers: { 'Authorization': 'Bearer ' + party.spotify_access_token },
+                json: true
+            };
+            request.get(options, function (error, response, body) {
+                console.log(JSON.stringify(body));
+                console.log(party.playbackState);
+                console.log(body.progress_ms);
+                if (party.playbackState) {
+                    if (body.progress_ms > body.item.duration_ms - 1000) {
+                        party.startNextSong();
+                    }
+                }
+            });
+        });
+
     }
 
 
@@ -228,6 +280,18 @@ exports.vote = function (req, res, next) {
 };
 
 exports.setQueue = function (req, res, next) {
+
+};
+
+exports.setSettings = function (req, res, next) {
+
+};
+
+exports.getStatus = function (req, res, next) {
+
+};
+
+exports.setSettings = function (req, res, next) {
 
 };
 
