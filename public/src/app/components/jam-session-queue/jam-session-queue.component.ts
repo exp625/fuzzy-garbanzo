@@ -26,6 +26,7 @@ export class JamSessionQueueComponent implements OnInit {
 
   ngOnInit() {
     this.getQueue();
+    this.socket.connect();
     this.socket.emit('message', 'hellloworld');
   }
 
