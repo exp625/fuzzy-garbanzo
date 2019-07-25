@@ -55,6 +55,14 @@ export class SpotifyService {
     return this.http.put('/api/party/settings', payload, this.headers);
   }
 
+  setPlayback(payload) {
+    return this.http.put('/api/party/playback', payload, this.headers);
+  }
+
+  getState() {
+    return this.http.get<any>('/api/party/state');
+  }
+
   setAuthToken(authToken: string) {
 
     this.authToken = authToken;

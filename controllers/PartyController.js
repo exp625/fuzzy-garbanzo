@@ -70,8 +70,8 @@ class Queue{
 
     sortQueue() {
         this.songs.sort((a, b) => {
-            if (a.getVoteCount() > b.getVoteCount()) return 1;
-            if (a.getVoteCount() < b.getVoteCount()) return -1;
+            if (a.getVoteCount() > b.getVoteCount()) return -1;
+            if (a.getVoteCount() < b.getVoteCount()) return 1;
             if (a.getDate() > b.getDate()) return 1;
             if (a.getDate() < b.getDate()) return -1;
             return 0;
@@ -101,9 +101,10 @@ class Party{
         this.queue = new Queue();
         this.socket = socket;
         this.currentSong = undefined;
-        this.playbackState = true;
+        this.queueActive = true;
         this.selectedDeviceId = '';
         this.ipVoting = false;
+        this.playbackState = undefined;
     }
 
     getLabel() {
@@ -143,6 +144,34 @@ class Party{
 
     getCurrentSong() {
         return this.currentSong;
+    }
+
+    getPlaybackState() {
+        return this.playbackState;
+    }
+
+    setPlaybackState(state) {
+       this.playbackState = state;
+    }
+
+    getQueueActive() {
+        return this.queueActive;
+    }
+
+    setQueueActive(state) {
+        let val = 'pause';
+        if (state.playback) {
+            val = 'true';
+        }
+        const query = {'device_id': this.getSelectedDeviceId()};
+        const options = {
+            url: 'https://api.spotify.com/v1/me/player/' + val,
+            headers: {'Authorization': 'Bearer ' + this.spotify_access_token},
+            json: true
+        };
+        request.put(options, (error, response, body) => {
+            this.queueActive = state.playback;
+        });
     }
 
     startNextSong () {
@@ -229,7 +258,8 @@ class PartyController{
                 json: true
             };
             request.get(options, function (error, response, body) {
-                if (party.playbackState) {
+                party.setPlaybackState(body);
+                if (party.queueActive) {
                     if (body.progress_ms > body.item.duration_ms - 1000 || body.is_playing === false) {
                         party.startNextSong();
                     }
@@ -313,7 +343,24 @@ exports.setSettings = function (req, res, next) {
 };
 
 exports.getStatus = function (req, res, next) {
+    const label = req.session.label;
+    try {
+        const party = partyController.getParty(label);
+        res.jsonp({'currentSong': party.getCurrentSong(), 'state': party.getPlaybackState()});
+    } catch (e) {
+        next(new Error('Party Error: Could not find a party with the submitted label'))
+    }
+};
 
+exports.setPlayback = function (req, res, next) {
+    const label = req.session.label;
+    try {
+        const party = partyController.getParty(label);
+        party.setQueueActive(req.body);
+        res.jsonp({'Settings': 'Saved'});
+    } catch (e) {
+        next(new Error('Party Error: Could not find a party with the submitted label'))
+    }
 };
 
 exports.socketAuth = function (handshakeData, accept) {

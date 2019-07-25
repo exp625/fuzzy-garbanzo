@@ -27,6 +27,15 @@ router.use(function (req, res, next) {
         partyController.setSettings(req, res, next);
     });
 
+    router.get('/state', function (req, res, next) {
+        partyController.getStatus(req, res, next);
+    });
+
+    router.put('/playback', function (req, res, next) {
+        partyController.setPlayback(req, res, next);
+    });
+
+
 
 
 });

@@ -16,7 +16,8 @@ export class JamSessionQueueComponent implements OnInit {
   @Input() userStatus;
 
   public pauseButtonFlag = true;
-  public currentSong: SpotifyTrackFull = undefined;
+  public currentSong: QueueSong = undefined;
+  public playbackState = undefined;
   public songList: QueueSong[] = [];
   public partyQueue: QueueSong[] = [];
   public onSearch = false;
@@ -26,19 +27,17 @@ export class JamSessionQueueComponent implements OnInit {
 
   ngOnInit() {
     this.getQueue();
+    this.spotify.getState().subscribe(state => {
+      console.log(state.currentSong);
+      console.log(state.state);
+      this.currentSong = state.currentSong;
+      this.playbackState = state.state;
+    });
     this.socket.connect();
   }
 
-  test () {
-    this.spotify.login();
-  }
-
-  pause () {
-    this.spotify.pause().subscribe();
-  }
-
-  play () {
-    this.spotify.play().subscribe();
+  playback (state: boolean) {
+    this.spotify.setPlayback({'playback': state}).subscribe();
   }
 
   spotifySearch(e) {
@@ -87,7 +86,7 @@ export class JamSessionQueueComponent implements OnInit {
   }
   */
 
-  playSong(song: QueueSong) {
+  vote(song: QueueSong) {
     this.spotify.vote(song.spotifyTrackFull).subscribe(value => {
       this.partyQueue = value;
       if (!this.onSearch) {

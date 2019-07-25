@@ -1,37 +1,26 @@
-<hr>
-<button (click)="test()" class="btn btn-primary">Login</button>
-<button (click)="pause()" class="btn btn-primary" [hidden]="!pauseButtonFlag">Pause</button>
-<button (click)="play()" class="btn btn-primary"[hidden]="!pauseButtonFlag">Play</button>
-
-
-
-<hr>
-
 <form>
   <div class="form-group row">
     <input type="text" class="form-control col" id="spotifySearchText" placeholder="Search for your favourite Tracks" (keyup)="spotifySearch($event)">
-    <a (click)="clear()" href="javascript:void(0);">
-      <i class="material-icons md-48" style="vertical-align: center;">clear</i>
-    </a>
+    <button class="btn btn-primary mx-3" (click)="clear()">Clear</button>
   </div>
 </form>
 
+<ul class="list-group">
+  <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="currentSong !== undefined">
+    {{currentSong.spotifyTrackFull.name}}
+    <button *ngIf="playbackState.is_playing" (click)="playback(false)" class="btn btn-primary">Stop</button>
+    <button *ngIf="!playbackState.is_playing" (click)="playback(true)" class="btn btn-primary">Play</button>
+  </li>
 
-<table class="table">
-  <tbody>
-  <tr class="table-active" *ngIf="!onSearch && songList.length !== 0">
-  </tr>
-  <tr *ngFor="let song of songList">
-    <th scope="row">{{song.spotifyTrackFull.name}} [Votes: {{song.votes}}]</th>
-    <td>
-      <a (click)="playSong(song)" href="javascript:void(0);">
-        <i class="material-icons md-48">play_circle_filled_white</i>
-      </a>
-    </td>
-  </tr>
-  <tr *ngIf="songList.length === 0">
-    <th scope="row" style="text-align: center;">Currently there are no songs in the queue!</th>
-    <td></td>
-  </tr>
-  </tbody>
-</table>
+  <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let song of songList">
+    <img [src]="song.spotifyTrackFull.album.images[2].url" width="64" height="64">
+    {{song.spotifyTrackFull.name}}
+    <button (click)="vote(song)" class="btn btn-primary justify-content-end">Vote</button>
+    <span class="badge badge-primary badge-pill">{{song.votes}}</span>
+  </li>
+
+  <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="songList.length === 0">
+    Currently there are no songs in the queue!
+  </li>
+</ul>
+

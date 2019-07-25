@@ -20,6 +20,8 @@ export class LandingpageComponent implements OnInit {
 
   ngOnInit() {
     this.auth.getUserStatus().subscribe(value => {
+      this.userStatus = 'Undefined';
+      this.userLabel = 'Undefined';
       if (value.user !== 'New') {
         if (value.user === 'Guest') {
           this.userStatus = 'Guest';
@@ -37,9 +39,9 @@ export class LandingpageComponent implements OnInit {
   }
 
   checkForRedirect() {
-    //if (this.userStatus === 'Host' || this.userStatus === 'Guest' && this.userLabel !== '') {
-    //  this.router.navigate(['/' + this.userLabel]);
-    //}
+    if ((this.userStatus === 'Host' || this.userStatus === 'Guest') && this.userLabel.length === 5) {
+      this.router.navigate(['/' + this.userLabel]);
+    }
   }
 
   login() {
