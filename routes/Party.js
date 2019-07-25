@@ -23,6 +23,12 @@ router.use(function (req, res, next) {
         partyController.vote(req, res, next);
     });
 
+    router.put('/settings', function (req, res, next) {
+        partyController.setSettings(req, res, next);
+    });
+
+
+
 });
 
 module.exports = router;

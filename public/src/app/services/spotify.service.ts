@@ -47,6 +47,14 @@ export class SpotifyService {
     return this.http.put<QueueSong[]>('/api/party/vote', spotifyTrackFull, this.headers);
   }
 
+  getDevices() {
+    return this.http.get<any>('/api/spotify/devices');
+  }
+
+  saveSettings(payload) {
+    return this.http.put('/api/party/settings', payload, this.headers);
+  }
+
   setAuthToken(authToken: string) {
 
     this.authToken = authToken;

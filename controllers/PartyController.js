@@ -102,6 +102,8 @@ class Party{
         this.socket = socket;
         this.currentSong = undefined;
         this.playbackState = true;
+        this.selectedDeviceId = '';
+        this.ipVoting = false;
     }
 
     getLabel() {
@@ -113,11 +115,30 @@ class Party{
     }
 
     getSelectedDeviceId() {
-        return '';
+        return this.selectedDeviceId;
     }
 
     getQueue() {
         return this.queue;
+    }
+
+    setSettings(settings) {
+        console.log(settings.device);
+        if(this.selectedDeviceId !== settings.device) {
+            const payload = {'device_ids': [settings.device], 'play': true};
+            const options = {
+                url: 'https://api.spotify.com/v1/me/player',
+                headers: {'Authorization': 'Bearer ' + this.spotify_access_token},
+                body: payload,
+                json: true
+            };
+            request.put(options, function (error, response, body) {
+                console.log("Changed Playback");
+            });
+        }
+
+        this.selectedDeviceId = settings.device;
+        this.ipVoting = settings.ip;
     }
 
     getCurrentSong() {
@@ -201,19 +222,15 @@ class PartyController{
     }
 
     queueWorker() {
-        console.log("Queue Worker");
         this.partys.forEach(party => {
             const options = {
-                url: 'https://api.spotify.com/v1/me/player',
+                url: 'https://api.spotify.com/v1/me/player?device_id=' + party.getSelectedDeviceId() ,
                 headers: { 'Authorization': 'Bearer ' + party.spotify_access_token },
                 json: true
             };
             request.get(options, function (error, response, body) {
-                console.log(JSON.stringify(body));
-                console.log(party.playbackState);
-                console.log(body.progress_ms);
                 if (party.playbackState) {
-                    if (body.progress_ms > body.item.duration_ms - 1000) {
+                    if (body.progress_ms > body.item.duration_ms - 1000 || body.is_playing === false) {
                         party.startNextSong();
                     }
                 }
@@ -284,14 +301,18 @@ exports.setQueue = function (req, res, next) {
 };
 
 exports.setSettings = function (req, res, next) {
-
+    const label = req.session.label;
+    const id = req.session.id;
+    try {
+        const party = partyController.getParty(label);
+        party.setSettings(req.body);
+        res.jsonp({'Settings': 'Saved'});
+    } catch (e) {
+        next(new Error('Party Error: Could not find a party with the submitted label'))
+    }
 };
 
 exports.getStatus = function (req, res, next) {
-
-};
-
-exports.setSettings = function (req, res, next) {
 
 };
 
