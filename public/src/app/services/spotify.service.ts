@@ -34,9 +34,17 @@ export class SpotifyService {
     return this.http.get<any>('/api/party/create');
   }
 
+  leave() {
+    return this.http.get<any>('/api/party/leave');
+  }
+
   joinParty(label: string) {
     const payload = {'label': label};
     return this.http.put<any>('/api/party/join', payload, this.headers);
+  }
+
+  getPartyInfo() {
+    return this.http.get<any>('/api/party/info');
   }
 
   getQueue() {
@@ -49,6 +57,14 @@ export class SpotifyService {
 
   getDevices() {
     return this.http.get<any>('/api/spotify/devices');
+  }
+
+  addPlaylist(uri) {
+    return this.http.put<any>('/api/party/playlist', {'uri': uri}, this.headers);
+  }
+
+  getPlaylists() {
+    return this.http.get<any>('/api/spotify/playlist');
   }
 
   saveSettings(payload) {

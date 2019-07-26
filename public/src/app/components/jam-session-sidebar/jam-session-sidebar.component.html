@@ -1,6 +1,6 @@
 <nav id="sidebar" style="padding-right: 20px">
   <div class="sidebar-header">
-    <h3>Jam Session</h3>
+    <h3>{{partyName}}</h3>
     <h3>{{userStatus.label}}</h3>
     User Status: {{userStatus.user}}
   </div>
@@ -9,8 +9,8 @@
   <form #settings="ngForm" *ngIf="userStatus.user === 'Host'">
 
     <div class="form-group">
-      <select class="custom-select" name="deviceSelect" [(ngModel)]="selectedDevice">
-        <option selected="">Select your Playback Device</option>
+      <label for="deviceSelect">Select your Playback Device</label>
+      <select class="custom-select" id="deviceSelect" name="deviceSelect" [(ngModel)]="selectedDevice">
         <option [value]="device.id" *ngFor="let device of avaliableDevices" >{{device.name}}</option>
       </select>
     </div>
@@ -23,6 +23,20 @@
     <button class="btn btn-primary btn-block" (click)="saveSettings()">Update Settings</button>
     <hr>
   </form>
-  <button class="btn btn-danger btn-block my-3" (click)="join()">Leave Party</button>
+
+  <form #playlist="ngForm" *ngIf="userStatus.user === 'Host'">
+
+    <div class="form-group">
+      <label for="playlistSelect">Add fallback Playlist</label>
+      <select class="custom-select" id="playlistSelect" name="playlistSelect" [(ngModel)]="selectedPlaylist">
+        <option selected="">Select your Playback Device</option>
+        <option [value]="playlist.id" *ngFor="let playlist of avaliablePlaylists" >{{playlist.name}}</option>
+      </select>
+    </div>
+    <button class="btn btn-primary btn-block" (click)="addPlaylist()">Add Playlist to Queue</button>
+    <hr>
+  </form>
+
+  <button class="btn btn-danger btn-block my-3" (click)="leave()">Leave Party</button>
 </nav>
 

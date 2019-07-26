@@ -23,6 +23,10 @@ router.use(function (req, res, next) {
         authController.spotifyDeviceIds(req, res, next)
     });
 
+    router.get('/playlist', function (req, res, next) {
+        authController.spotifyPlaylists(req, res, next)
+    });
+
 });
 
 module.exports = router;

@@ -129,6 +129,35 @@ exports.spotifyDeviceIds = function (req, res, next) {
 
 };
 
+exports.spotifyPlaylists = function (req, res, next) {
+    if (req.session.label) {
+        try {
+            var party = partyController.getParty(req.session.label);
+            var spotify_access_token = party.getSpotifyAccessToken();
+        } catch (e) {
+            next(new Error('Party Error: Could not find Party with your label'));
+            return;
+        }
+    } else {
+        next(new Error('Party Error: Could not find a selected label'));
+        return;
+    }
+    const options = {
+        url: spotify_public_uri + '/me/playlists',
+        headers: { 'Authorization': 'Bearer ' + spotify_access_token },
+        json: true
+    };
+    request.get(options, function (error, response, body) {
+        if (!error) {
+            console.log(JSON.stringify(body));
+            res.send(body)
+        } else {
+            next(new Error('Spotify Error: Could not call the Spotify Api'));
+        }
+    });
+
+};
+
 function jsonToQueryString(json) {
     return '?' +
         Object.keys(json).map(function (key) {

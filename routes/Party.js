@@ -35,6 +35,18 @@ router.use(function (req, res, next) {
         partyController.setPlayback(req, res, next);
     });
 
+    router.get('/leave', function (req, res, next) {
+        partyController.leaveParty(req, res, next);
+    });
+
+    router.get('/info', function (req, res, next) {
+        partyController.getPartyInfo(req, res, next);
+    });
+
+    router.put('/playlist', function (req, res, next) {
+        partyController.addPlaylist(req, res, next);
+    });
+
 
 
 

@@ -109,6 +109,15 @@ class Party{
         this.selectedDeviceId = '';
         this.ipVoting = false;
         this.playbackState = undefined;
+        this.user = undefined;
+    }
+
+    setUser(user) {
+        this.user = user;
+    }
+
+    getUser() {
+        return user;
     }
 
     getLabel() {
@@ -213,11 +222,26 @@ class PartyController{
 
     generateNewParty(req, res) {
         var party = new Party(this.generateRandomLabel(), req.session.spotify_access_token, this.socket);
-        console.log(party);
-        req.session.label = party.getLabel();
-        req.session.save();
-        this.partys.push(party);
-        res.jsonp({'label' : party.getLabel()});
+
+        const options = {
+            url: 'https://api.spotify.com/v1/me',
+            headers: {'Authorization': 'Bearer ' + req.session.spotify_access_token},
+            json: true
+        };
+        try {
+            request.get(options, (error, response, body) => {
+                req.session.label = party.getLabel();
+                req.session.save();
+                party.setUser(body);
+                this.partys.push(party);
+                res.jsonp({'label': party.getLabel()});
+            });
+        } catch (e) {
+            res.jsonp({'Error': 'Error while getting user details'});
+        }
+
+
+
     }
 
     generateRandomLabel(){
@@ -264,12 +288,19 @@ class PartyController{
             };
             request.get(options, (error, response, body)  => {
                 party.setPlaybackState(body);
-                if (party.queueActive && body.item) {
-                    if (body.progress_ms > body.item.duration_ms - 1000 || body.is_playing === false) {
-                        party.startNextSong();
-                        this.socket.to(party.getLabel()).emit('queue', party.getQueue().getObjectWithoutId(undefined));
-                        this.socket.to(party.getLabel()).emit('playback', {'currentSong': party.getCurrentSong(), 'state': party.getPlaybackState()});
+                try {
+                    if (party.queueActive && body.item) {
+                        if (body.progress_ms > body.item.duration_ms - 1000 || body.is_playing === false) {
+                            party.startNextSong();
+                            this.socket.to(party.getLabel()).emit('queue', party.getQueue().getObjectWithoutId(undefined));
+                            this.socket.to(party.getLabel()).emit('playback', {
+                                'currentSong': party.getCurrentSong(),
+                                'state': party.getPlaybackState()
+                            });
+                        }
                     }
+                } catch (e) {
+                    console.log("Party Controller Error");
                 }
             });
         });
@@ -284,6 +315,19 @@ var partyController = new PartyController();
 exports.getParty = function (label) {
     var party = partyController.getParty(label);
     return party;
+};
+
+exports.getPartyInfo = function (req, res, next) {
+    const label = req.session.label;
+    try {
+        const party = partyController.getParty(label);
+        const user = party.getUser();
+        console.log(user);
+        res.jsonp({'id': user.id, 'display_name': user.display_name});
+
+    } catch (e) {
+        next(new Error('Party Error: Could not find a party with the submitted label'))
+    }
 };
 
 exports.createParty = function (req, res, next) {
@@ -379,7 +423,58 @@ exports.setPlayback = function (req, res, next) {
     }
 };
 
-exports.leaveParty = function (req, res, next) {};
+exports.addPlaylist = function (req, res, next) {
+    const label = req.session.label;
+    const user = req.session.user_type;
+    if (user === 'Host') {
+        try {
+            const party = partyController.getParty(label);
+            const queue = party.getQueue();
+            const playlist = req.body.uri;
+            const options = {
+                url: 'https://api.spotify.com/v1/playlists/' + playlist + '/tracks',
+                headers: {'Authorization': 'Bearer ' + party.getSpotifyAccessToken()},
+                json: true
+            };
+            request.get(options, (error, response, body) => {
+                console.log(body);
+                body.items.forEach( track => {
+                    queue.vote('Host', track.track);
+                });
+                partyController.socket.to(party.getLabel()).emit('queue', party.getQueue().getObjectWithoutId());
+                res.jsonp({'Status': 'Playlist Added'});
+            });
+
+        } catch (e) {
+            next(new Error('Party Error: Could not find a party with the submitted label'))
+        }
+    } else {
+        next(new Error('Not allowed'))
+    }
+};
+
+exports.leaveParty = function (req, res, next) {
+    const label = req.session.label;
+    if (req.session.user_type === 'Guest') {
+        req.session.label = '';
+        req.session.user_type = 'New';
+        req.session.save();
+        res.jsonp({'Success': true});
+    } else if (req.session.user_type === 'Host') {
+        try {
+            var party = partyController.getParty(label);
+            req.session.user_type = 'New';
+            req.session.label = 'undefined';
+            req.session.save();
+            party.setQueueActive(false);
+            res.jsonp({'Success': true});
+        } catch (e) {
+            next(new Error('Party Error: Could not find a party with the submitted label'))
+        }
+    }
+
+
+};
 
 exports.socketAuth = function (handshakeData, accept) {
     console.log(handshakeData.session.user_type);
