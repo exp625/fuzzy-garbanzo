@@ -137,7 +137,6 @@ class Party{
     }
 
     setSettings(settings) {
-        console.log(settings.device);
         if(this.selectedDeviceId !== settings.device) {
             const payload = {'device_ids': [settings.device], 'play': true};
             const options = {
@@ -147,7 +146,6 @@ class Party{
                 json: true
             };
             request.put(options, function (error, response, body) {
-                console.log("Changed Playback");
             });
         }
 
@@ -202,7 +200,6 @@ class Party{
     }
 
     startNextSong () {
-        console.log("Start Next Song");
         this.currentSong = this.queue.getNextSong(true);
         if (this.currentSong) {
             const query = {'device_id': this.getSelectedDeviceId()};
@@ -215,7 +212,6 @@ class Party{
                 json: true
             };
             request.put(options, function (error, response, body) {
-                console.log("Started New Song");
             });
         }
     }
@@ -313,7 +309,6 @@ class PartyController{
                         }
                     }
                 } catch (e) {
-                    console.log("Party Controller Error");
                 }
             });
         });
@@ -335,7 +330,6 @@ exports.getPartyInfo = function (req, res, next) {
     try {
         const party = partyController.getParty(label);
         const user = party.getUser();
-        console.log(user);
         res.jsonp({'id': user.id, 'display_name': user.display_name});
 
     } catch (e) {
@@ -388,7 +382,6 @@ exports.vote = function (req, res, next) {
         if (party.ipVoting) {
             id = req.ip;
         }
-        console.log("Vote with id:" + id);
         queue.vote(id, spotifyTrackFull);
         res.send(queue.getObjectWithoutId(id));
         partyController.socket.to(party.getLabel()).emit('queue', party.getQueue().getObjectWithoutId(id));
@@ -450,7 +443,6 @@ exports.addPlaylist = function (req, res, next) {
                 json: true
             };
             request.get(options, (error, response, body) => {
-                console.log(body);
                 body.items.forEach( track => {
                     queue.vote('Host', track.track);
                 });
@@ -490,12 +482,9 @@ exports.leaveParty = function (req, res, next) {
 };
 
 exports.socketAuth = function (handshakeData, accept) {
-    console.log(handshakeData.session.user_type);
-    console.log(handshakeData.session.label);
 
   if (handshakeData.session.user_type === 'Host' || handshakeData.session.user_type === 'Guest') {
       if (partyController.getParty(handshakeData.session.label)) {
-          console.log("Accept Connection");
           accept(null, true);
       } else {
           return accept('Label is invalid.', false);
@@ -509,8 +498,6 @@ exports.socketAuth = function (handshakeData, accept) {
 exports.socketConnect = function (socket) {
 
     var label = socket.request.session.label;
-    console.log(JSON.stringify(socket.request.session));
-    console.log("Someone connected" + label);
     socket.join(label, function () {
     });
 };
