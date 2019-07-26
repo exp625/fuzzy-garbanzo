@@ -12,7 +12,6 @@ import {QueueSong} from '../classes/queue-song';
 export class SpotifyService {
 
   private authToken: string = null;
-  private redirect = 'http://localhost:3000/callback';
   private scope = 'user-read-private user-read-email user-modify-playback-state';
   private uri = '/api/spotify';
   private spotifyWebApi = 'https://api.spotify.com/v1';

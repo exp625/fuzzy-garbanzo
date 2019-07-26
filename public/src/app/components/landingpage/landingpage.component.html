@@ -8,16 +8,16 @@
   </div>
   <form #joinSession="ngForm">
     <div class="row">
-      <div class="col-2 offset-4">
+      <div class="col-md-2 offset-md-4 col-6">
         <input class="form-control" name="labelInput" type="text" placeholder="Jam Label" maxlength="5" [(ngModel)]="labelField">
       </div>
-      <div class="col-2">
+      <div class="col-md-2 col-6">
         <button class="btn btn-primary btn-block" (click)="join()">Join Party</button>
       </div>
     </div>
   </form>
   <div class="row">
-    <div class="col-2 offset-5">
+    <div class="col-md-2 offset-md-5 col-12">
       <button class="btn btn-primary btn-block my-4" *ngIf="userStatus !== 'Host'" (click)="login()">Login to Spotify</button>
       <button class="btn btn-primary btn-block my-4" *ngIf="userStatus === 'Host'" (click)="create()">Create new Jam Sesseion</button>
     </div>

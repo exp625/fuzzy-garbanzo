@@ -1,4 +1,4 @@
-<nav id="sidebar" style="padding-right: 20px">
+<nav id="sidebar" style="padding-right: 20px" *ngIf="userStatus.user === 'Host'">
   <div class="sidebar-header">
     <h3>{{partyName}}</h3>
     <h3>{{userStatus.label}}</h3>
@@ -37,6 +37,6 @@
     <hr>
   </form>
 
-  <button class="btn btn-danger btn-block my-3" (click)="leave()">Leave Party</button>
+
 </nav>
 

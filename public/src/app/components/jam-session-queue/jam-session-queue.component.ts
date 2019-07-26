@@ -4,6 +4,7 @@ import {QueueSong} from '../../classes/queue-song';
 import {SpotifyService} from '../../services/spotify.service';
 import {SpotifyPaging} from '../../classes/spotify-paging';
 import {Socket} from 'ngx-socket-io';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class JamSessionQueueComponent implements OnInit {
   public onSearch = false;
   public spotifySearchText = '';
 
-  constructor(private spotify: SpotifyService, private socket: Socket) { }
+  constructor(private spotify: SpotifyService, private socket: Socket, private router: Router) { }
 
   ngOnInit() {
     this.getQueue();
@@ -128,6 +129,13 @@ export class JamSessionQueueComponent implements OnInit {
     });
   }
 
+  leave() {
+    this.spotify.leave().subscribe( value => {
+      if (value.Success) {
+        this.router.navigate(['/']);
+      }
+    });
+  }
 
 
 }
