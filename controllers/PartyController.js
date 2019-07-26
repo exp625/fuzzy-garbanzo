@@ -189,11 +189,15 @@ class Party{
                 this.queueActive = state.playback;
             }, 2500);
             const states = this.getPlaybackState();
-            states.is_playing = state.playback;
-            this.socket.to(this.getLabel()).emit('playback', {
-                'currentSong': this.getCurrentSong(),
-                'state': this.getPlaybackState()
-            });
+            try {
+                states.is_playing = state.playback;
+                this.socket.to(this.getLabel()).emit('playback', {
+                    'currentSong': this.getCurrentSong(),
+                    'state': this.getPlaybackState()
+                });
+            } catch (e) {
+                
+            }
         });
     }
 
