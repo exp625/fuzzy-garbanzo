@@ -1,0 +1,10 @@
+version: '3'
+services:
+  mp-fragentool:
+    image: jamsession:latest
+    environment:
+     - REDIRECT_URI=http://localhost:3000/api/auth/callback
+     - SPOTIFY_CLIENT_ID=18e9faedbb4b4e6c857a891d10a6ead3
+     - SPOTIFY_CLIENT_SECRET=75939eaf32d74f95beb7fae361da21ab
+    ports:
+     - "3000:3000"

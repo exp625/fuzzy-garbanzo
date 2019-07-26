@@ -13,7 +13,7 @@ COPY . /usr/src/app
 
 # compile the angular app
 WORKDIR /usr/src/app/public
-RUN npm install --only=prod
+RUN npm install
 RUN npm run build -- --prod
 RUN rm -rf node_modules
 
@@ -21,4 +21,4 @@ WORKDIR /usr/src/app
 
 EXPOSE 3000
 
-CMD [ "npm", "start" ]
+CMD [ "node", "app.js" ]
