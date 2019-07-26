@@ -175,8 +175,9 @@ class Party{
     setQueueActive(state) {
         let val = 'pause';
         if (state.playback) {
-            val = 'true';
+            val = 'play';
         }
+        this.queueActive = false;
         const query = {'device_id': this.getSelectedDeviceId()};
         const options = {
             url: 'https://api.spotify.com/v1/me/player/' + val,
@@ -184,7 +185,15 @@ class Party{
             json: true
         };
         request.put(options, (error, response, body) => {
-            this.queueActive = state.playback;
+            setTimeout( () => {
+                this.queueActive = state.playback;
+            }, 2500);
+            const states = this.getPlaybackState();
+            states.is_playing = state.playback;
+            this.socket.to(this.getLabel()).emit('playback', {
+                'currentSong': this.getCurrentSong(),
+                'state': this.getPlaybackState()
+            });
         });
     }
 
