@@ -11,7 +11,7 @@ export class JamSessionComponent implements OnInit {
 
   constructor(private auth: AuthService, private router: Router) { }
 
-  private userStatus = {'user': 'New', 'label': ''};
+  public userStatus = {'user': 'New', 'label': ''};
 
   ngOnInit() {
     this.auth.getUserStatus().subscribe(value => {

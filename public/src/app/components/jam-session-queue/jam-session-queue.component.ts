@@ -52,6 +52,7 @@ export class JamSessionQueueComponent implements OnInit {
     });
 
     this.socket.fromEvent<any>('playback').subscribe( playback => {
+      console.log('Playback Socket');
       this.playbackState = playback.state;
       this.currentSong = playback.currentSong;
     });

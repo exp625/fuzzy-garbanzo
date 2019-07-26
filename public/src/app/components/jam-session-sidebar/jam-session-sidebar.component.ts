@@ -12,14 +12,14 @@ import {SpotifyPlaylistSimplified} from '../../classes/spotify-playlist-simplifi
 })
 export class JamSessionSidebarComponent implements OnInit {
 
-  private avaliableDevices = [];
-  private selectedDevice = '';
+  public avaliableDevices = [];
+  public selectedDevice = '';
 
-  private avaliablePlaylists: SpotifyPlaylistSimplified[] = [];
-  private selectedPlaylist: string = undefined;
+  public avaliablePlaylists: SpotifyPlaylistSimplified[] = [];
+  public selectedPlaylist: string = undefined;
 
-  private partyName = '';
-  private ipVoting = false;
+  public partyName = '';
+  public ipVoting = false;
 
   @Input() userStatus;
   constructor(private auth: AuthService, private spotify: SpotifyService, private router: Router) { }
