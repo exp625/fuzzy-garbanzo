@@ -32,8 +32,12 @@ class QueueSong{
         }
     }
 
-    getObjectWithoutId() {
-        return {'spotifyTrackFull': this.spotifyTrackFull, 'votes': this.getVoteCount()};
+    checkForVote(id) {
+        return this.votes.includes(id);
+    }
+
+    getObjectWithoutId(id) {
+        return {'spotifyTrackFull': this.spotifyTrackFull, 'votes': this.getVoteCount(), 'voted': this.checkForVote(id)};
     }
 }
 
@@ -86,9 +90,9 @@ class Queue{
         }
     }
 
-    getObjectWithoutId() {
+    getObjectWithoutId(id) {
         return this.songs.map(song => {
-            return song.getObjectWithoutId();
+            return song.getObjectWithoutId(id);
         });
     }
 }
@@ -157,6 +161,7 @@ class Party{
     getQueueActive() {
         return this.queueActive;
     }
+
 
     setQueueActive(state) {
         let val = 'pause';
@@ -257,11 +262,13 @@ class PartyController{
                 headers: { 'Authorization': 'Bearer ' + party.spotify_access_token },
                 json: true
             };
-            request.get(options, function (error, response, body) {
+            request.get(options, (error, response, body)  => {
                 party.setPlaybackState(body);
-                if (party.queueActive) {
+                if (party.queueActive && body.item) {
                     if (body.progress_ms > body.item.duration_ms - 1000 || body.is_playing === false) {
                         party.startNextSong();
+                        this.socket.to(party.getLabel()).emit('queue', party.getQueue().getObjectWithoutId(undefined));
+                        this.socket.to(party.getLabel()).emit('playback', {'currentSong': party.getCurrentSong(), 'state': party.getPlaybackState()});
                     }
                 }
             });
@@ -276,7 +283,6 @@ var partyController = new PartyController();
 
 exports.getParty = function (label) {
     var party = partyController.getParty(label);
-    console.log(party);
     return party;
 };
 
@@ -301,10 +307,14 @@ exports.joinParty = function (req, res, next) {
 
 exports.getQueue = function (req, res, next) {
     const label = req.session.label;
+    let id = req.session.id;
     try {
         const party = partyController.getParty(label);
         const queue = party.getQueue();
-        res.send(queue.getObjectWithoutId());
+        if (party.ipVoting) {
+            id = req.ip;
+        }
+        res.send(queue.getObjectWithoutId(id));
     } catch (e) {
         next(new Error('Party Error: Could not find a party with the submitted label'))
     }
@@ -313,13 +323,19 @@ exports.getQueue = function (req, res, next) {
 
 exports.vote = function (req, res, next) {
     const label = req.session.label;
-    const id = req.session.id;
+    let id = req.session.id;
     try {
         const party = partyController.getParty(label);
         const queue = party.getQueue();
         const spotifyTrackFull = req.body;
+        if (party.ipVoting) {
+            id = req.ip;
+        }
+        console.log("Vote with id:" + id);
         queue.vote(id, spotifyTrackFull);
-        res.send(queue.getObjectWithoutId());
+        res.send(queue.getObjectWithoutId(id));
+        partyController.socket.to(party.getLabel()).emit('queue', party.getQueue().getObjectWithoutId(id));
+
     } catch (e) {
         next(new Error('Party Error: Could not find a party with the submitted label'))
     }
@@ -363,6 +379,8 @@ exports.setPlayback = function (req, res, next) {
     }
 };
 
+exports.leaveParty = function (req, res, next) {};
+
 exports.socketAuth = function (handshakeData, accept) {
     console.log(handshakeData.session.user_type);
     console.log(handshakeData.session.label);
@@ -381,9 +399,12 @@ exports.socketAuth = function (handshakeData, accept) {
 };
 
 exports.socketConnect = function (socket) {
-    console.log("Someone connected");
-    var label = socket.handshake.label;
-    socket.join(label);
+
+    var label = socket.request.session.label;
+    console.log(JSON.stringify(socket.request.session));
+    console.log("Someone connected" + label);
+    socket.join(label, function () {
+    });
 };
 
 exports.setSocket = function (socket) {

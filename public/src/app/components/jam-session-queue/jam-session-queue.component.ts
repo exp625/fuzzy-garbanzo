@@ -33,7 +33,28 @@ export class JamSessionQueueComponent implements OnInit {
       this.currentSong = state.currentSong;
       this.playbackState = state.state;
     });
-    this.socket.connect();
+    this.socket.fromEvent('test').subscribe(value => {
+      console.log('Socket Test');
+    });
+    this.socket.fromEvent<QueueSong[]>('queue').subscribe(queue => {
+      this.partyQueue = queue.map( (q) => {
+        let voted = false;
+        this.partyQueue.forEach( value => {
+          if (value.spotifyTrackFull.uri === q.spotifyTrackFull.uri) {
+            voted = value.voted;
+          }
+        });
+        return new QueueSong(q.spotifyTrackFull, q.votes, voted);
+      });
+      if (!this.onSearch) {
+        this.songList = this.partyQueue;
+      }
+    });
+
+    this.socket.fromEvent<any>('playback').subscribe( playback => {
+      this.playbackState = playback.state;
+      this.currentSong = playback.currentSong;
+    });
   }
 
   playback (state: boolean) {
@@ -50,12 +71,14 @@ export class JamSessionQueueComponent implements OnInit {
           const songs = page.items as SpotifyTrackFull[];
           this.songList = songs.map(song => {
             let votes = 0;
+            let voted = false;
             queue.forEach(q => {
               if (q.spotifyTrackFull.uri === song.uri) {
                 votes = q.votes;
+                voted = q.voted
               }
             });
-            return new QueueSong(song, votes);
+            return new QueueSong(song, votes, voted);
           }).sort((a, b) => b.spotifyTrackFull.popularity - a.spotifyTrackFull.popularity);
         });
       });

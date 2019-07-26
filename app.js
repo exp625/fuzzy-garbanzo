@@ -31,6 +31,8 @@ io.use(function(socket, next) {
 io.set('authorization', partyController.socketAuth);
 io.on('connection', partyController.socketConnect);
 
+
+
 partyController.setSocket(io);
 
 

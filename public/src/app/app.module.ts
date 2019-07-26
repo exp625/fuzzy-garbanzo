@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MainComponent } from './components/party-queue/main.component';
 
 import { SpotifyService } from './services/spotify.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -22,7 +21,6 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {}};
 @NgModule({
   declarations: [
     AppComponent,
-    MainComponent,
     LandingpageComponent,
     JamSessionComponent,
     JamSessionSidebarComponent,
