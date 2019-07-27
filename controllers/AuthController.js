@@ -80,7 +80,10 @@ exports.spotifyCallback = function (req, res, next) {
                     user_type: 'Host'
                 }));
                 */
+            //res.redirect('http://localhost:4200');
             res.redirect('/');
+
+
         } else {
             next(new Error('Spotify Auth: Invalid Token'));
         }
