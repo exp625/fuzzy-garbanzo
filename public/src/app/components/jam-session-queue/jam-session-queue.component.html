@@ -15,15 +15,15 @@
   </li>
   <li class="list-group-item align-items-center justify-content-between active" *ngIf="currentSong !== undefined">
     <div class="row">
-      <div class="col-md-2 col-1">
-        <img [src]="currentSong.spotifyTrackFull.album.images[2].url" class="img-thumbnail img-fluid">
+      <div class="col-md-1 col-3">
+        <img [src]="currentSong.spotifyTrackFull.album.images[2].url" width="64" height="64">
       </div>
-      <div class="col-md-8 col-6" style="font-size: 10px">
+      <div class="col-md-10 col-7" style="font-size: 0.9em">
         {{currentSong.spotifyTrackFull.name}}
       </div>
-      <div class="col-md-2 col-1">
-        <button *ngIf="playbackState.is_playing" (click)="playback(false)" class="btn btn-primary">Stop</button>
-        <button *ngIf="!playbackState.is_playing" (click)="playback(true)" class="btn btn-primary">Play</button>
+      <div class="col-md-1 col-2">
+        <button *ngIf="playbackState.is_playing && userStatus.user === 'Host'" (click)="playback(false)" class="btn btn-primary">Stop</button>
+        <button *ngIf="!playbackState.is_playing && userStatus.user === 'Host'" (click)="playback(true)" class="btn btn-primary">Play</button>
       </div>
     </div>
   </li>
@@ -43,7 +43,7 @@
       <div class="col-md-1 col-3">
         <img [src]="song.spotifyTrackFull.album.images[2].url" width="64" height="64">
       </div>
-      <div class="col-md-8 col-5" style="font-size: 0.9em">
+      <div class="col-md-9 col-5" style="font-size: 0.9em">
         <p>{{song.spotifyTrackFull.name}}</p>
       </div>
       <div class="col-md-1 col-2">
