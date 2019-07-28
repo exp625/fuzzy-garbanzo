@@ -37,15 +37,10 @@ exports.spotifyLogin = function (req, res, next) {
 
 exports.spotifyCallback = function (req, res, next) {
 
-    // TODO: Check state
     var code = req.query.code || null;
     var state = req.query.state || null;
     var sess = req.session;
 
-
-    console.log("State " +  state);
-    console.log("Session ID" + sess.id);
-    console.log(JSON.stringify(res.sessionStore));
     var auth_options = {
         url: 'https://accounts.spotify.com/api/token',
         form: {
@@ -59,33 +54,15 @@ exports.spotifyCallback = function (req, res, next) {
         json: true
     };
 
-    request.post(auth_options, function(error, response, body) {
+    request.post(auth_options, (error, response, body) => {
         if (!error && response.statusCode === 200) {
-
-            console.log('Access_Token: ' + body.access_token);
-            console.log('Request_Token: ' + body.refresh_token);
-            console.log('Session: ' + sess);
             sess.spotify_access_token = body.access_token;
             sess.spotify_refresh_token = body.refresh_token;
             sess.user_type = 'Host';
             sess.save();
-
-
-            // we can also pass the token to the browser to make requests from there
-            /*
-            res.redirect('/login/' +
-                querystring.stringify({
-                    access_token: body.access_token,
-                    refresh_token: body.refresh_token,
-                    user_type: 'Host'
-                }));
-                */
-            //res.redirect('http://localhost:4200');
             res.redirect('/');
-
-
         } else {
-            next(new Error('Spotify Auth: Invalid Token'));
+            next(new Error(error));
         }
     });
 
