@@ -49,6 +49,7 @@ class Queue{
     }
 
     vote(id, spotifyTrackFull) {
+        console.log("New Vote with id" + id);
         let notInQueueFlag = true;
         this.songs.forEach(song => {
             if (song.getSpotifyTrackFull().uri === spotifyTrackFull.uri) {
@@ -60,6 +61,9 @@ class Queue{
         if (notInQueueFlag) {
             let newSong = new QueueSong(spotifyTrackFull);
             newSong.vote(id);
+            if(id === 'Host') {
+                newSong.date = Date.now() + 31536000000;
+            }
             this.songs.push(newSong);
         }
 
@@ -118,10 +122,11 @@ class Party{
 
     setUser(user) {
         this.user = user;
+        this.user.display_name = this.user.display_name + '\'s Jam Session';
     }
 
     getUser() {
-        return user;
+        return this.user;
     }
 
     getLabel() {
@@ -343,6 +348,18 @@ exports.getPartyInfo = function (req, res, next) {
         const party = partyController.getParty(label);
         const user = party.getUser();
         res.jsonp({'id': user.id, 'display_name': user.display_name});
+
+    } catch (e) {
+        next(new Error('Party Error: Could not find a party with the submitted label'))
+    }
+};
+
+exports.setPartyName = function (req, res, next) {
+    const label = req.session.label;
+    try {
+        const party = partyController.getParty(label);
+        party.user.display_name = req.body.name;
+        res.jsonp({'id': party.user.id, 'display_name': party.user.display_name});
 
     } catch (e) {
         next(new Error('Party Error: Could not find a party with the submitted label'))

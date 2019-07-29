@@ -74,6 +74,10 @@ export class SpotifyService {
     return this.http.put('/api/party/playback', payload, this.headers);
   }
 
+  setName(name) {
+    return this.http.put<any>('/api/party/name', {'name': name}, this.headers);
+  }
+
   getState() {
     return this.http.get<any>('/api/party/state');
   }

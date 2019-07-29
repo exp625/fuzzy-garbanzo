@@ -7,7 +7,10 @@
   <hr>
 
   <form #settings="ngForm" *ngIf="userStatus.user === 'Host'">
-
+    <div class="form-group">
+      <label for="partyName">Name your Jam Session</label>
+      <input type="text" name="partyName" id="partyName" [(ngModel)]="partyName" class="form-control">
+    </div>
     <div class="form-group">
       <label for="deviceSelect">Select your Playback Device</label>
       <select class="custom-select" id="deviceSelect" name="deviceSelect" [(ngModel)]="selectedDevice">
@@ -36,6 +39,9 @@
     <button class="btn btn-primary btn-block" (click)="addPlaylist()">Add Playlist to Queue</button>
     <hr>
   </form>
+
+  <button class="btn btn-info btn-block my-3" (click)="tv()" >TV Mode</button>
+  <button class="btn btn-danger btn-block my-3" (click)="leave()" >Leave Party</button>
 
 
 </nav>

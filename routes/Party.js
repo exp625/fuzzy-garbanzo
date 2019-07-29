@@ -43,6 +43,10 @@ router.use(function (req, res, next) {
         partyController.getPartyInfo(req, res, next);
     });
 
+    router.put('/name', function (req, res, next) {
+        partyController.setPartyName(req, res, next);
+    });
+
     router.put('/playlist', function (req, res, next) {
         partyController.addPlaylist(req, res, next);
     });
