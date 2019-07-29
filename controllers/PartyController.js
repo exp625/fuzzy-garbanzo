@@ -1,4 +1,5 @@
 var request = require('request');
+var authController = require('../controllers/AuthController');
 
 class QueueSong{
 
@@ -99,9 +100,12 @@ class Queue{
 
 class Party{
 
-    constructor(label, spotify_access_token, socket){
+    constructor(label, session, socket){
         this.label = label;
-        this.spotify_access_token = spotify_access_token;
+        this.spotify_access_token = session.spotify_access_token;
+        this.spotify_refresh_token = session.spotify_refresh_token;
+        this.spotify_valid_until = session.spotify_valid_until;
+        this.session = session;
         this.queue = new Queue();
         this.socket = socket;
         this.currentSong = undefined;
@@ -230,7 +234,7 @@ class PartyController{
     }
 
     generateNewParty(req, res) {
-        var party = new Party(this.generateRandomLabel(), req.session.spotify_access_token, this.socket);
+        var party = new Party(this.generateRandomLabel().toUpperCase(), req.session, this.socket);
 
         const options = {
             url: 'https://api.spotify.com/v1/me',
@@ -290,6 +294,14 @@ class PartyController{
 
     queueWorker() {
         this.partys.forEach(party => {
+
+            // Check for auth token
+            if (party.spotify_valid_until - 60000 < Date.now()) {
+                authController.spotifyRefreshToken(party);
+                party.spotify_valid_until = party.spotify_valid_until + 5000;
+            }
+
+
             const options = {
                 url: 'https://api.spotify.com/v1/me/player?device_id=' + party.getSelectedDeviceId() ,
                 headers: { 'Authorization': 'Bearer ' + party.spotify_access_token },
@@ -344,7 +356,7 @@ exports.createParty = function (req, res, next) {
 };
 
 exports.joinParty = function (req, res, next) {
-    const label = req.body.label;
+    const label = req.body.label.toUpperCase();
     try {
         var party = partyController.getParty(label);
         req.session.user_type = 'Guest';

@@ -14,18 +14,6 @@ exports.auth = function () {
 };
 
 exports.spotifyLogin = function (req, res, next) {
-
-    // Doest not work due to CORS
-    /*
-    res.redirect('https://accounts.spotify.com/authorize?' +
-        querystring.stringify({
-            response_type: 'code',
-            client_id: spotify_client_id,
-            scope: spotify_app_scope,
-            redirect_uri: redirect_uri,
-            state: req.session.id
-        }));
-     */
     res.jsonp({'url': 'https://accounts.spotify.com/authorize?' +
             querystring.stringify({
                 response_type: 'code',
@@ -58,9 +46,10 @@ exports.spotifyCallback = function (req, res, next) {
         if (!error && response.statusCode === 200) {
             sess.spotify_access_token = body.access_token;
             sess.spotify_refresh_token = body.refresh_token;
+            sess.spotify_valid_until = body.expires_in * 1000 + Date.now();
             sess.user_type = 'Host';
             sess.save();
-            res.redirect('/');
+            res.redirect('http://localhost:4200/');
         } else {
             next(new Error(error));
         }
@@ -68,30 +57,34 @@ exports.spotifyCallback = function (req, res, next) {
 
 };
 
-exports.spotifyRefreshToken = function(req, res, next) {
+exports.spotifyRefreshToken = function(party) {
 
-    if(!(req.session.spotify_access_token && req.session.spotify_refresh_token)) {
+    if(!(party.spotify_access_token && party.spotify_refresh_token)) {
         next(new Error('Spotify Auth: Invalid Session'))
     }
+    console.log("Trying to get new Spotify Auth Token");
 
     // requesting access token from refresh token
-    var refresh_token = req.query.refresh_token;
     var authOptions = {
         url: 'https://accounts.spotify.com/api/token',
         headers: { 'Authorization': 'Basic ' + (new Buffer(spotify_client_id + ':' + spotify_client_secret).toString('base64')) },
         form: {
             grant_type: 'refresh_token',
-            refresh_token: refresh_token
+            refresh_token: party.spotify_refresh_token
         },
         json: true
     };
 
-    request.post(authOptions, function(error, response, body) {
+    request.post(authOptions, (error, response, body) => {
         if (!error && response.statusCode === 200) {
-            var access_token = body.access_token;
-            res.send({
-                'access_token': access_token
-            });
+            console.log("Got new Spotify Auth Token");
+            party.session.spotify_access_token = body.access_token;
+            party.session.spotify_valid_until = body.expires_in * 1000 + Date.now();
+            party.spotify_access_token = body.access_token;
+            party.spotify_valid_until = body.expires_in * 1000 + Date.now();
+            party.session.save()
+        } else {
+            console.log(error);
         }
     });
 };
