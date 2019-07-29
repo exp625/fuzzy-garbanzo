@@ -49,7 +49,7 @@ exports.spotifyCallback = function (req, res, next) {
             sess.spotify_valid_until = body.expires_in * 1000 + Date.now();
             sess.user_type = 'Host';
             sess.save();
-            res.redirect('http://localhost:4200/');
+            res.redirect('');
         } else {
             next(new Error(error));
         }
