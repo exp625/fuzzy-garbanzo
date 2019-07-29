@@ -472,11 +472,13 @@ exports.addPlaylist = function (req, res, next) {
                 json: true
             };
             request.get(options, (error, response, body) => {
-                body.items.forEach( track => {
-                    queue.vote('Host', track.track);
-                });
-                partyController.socket.to(party.getLabel()).emit('queue', party.getQueue().getObjectWithoutId());
-                res.jsonp({'Status': 'Playlist Added'});
+                if (!error && response.statusCode === 200) {
+                    body.items.forEach(track => {
+                        queue.vote('Host', track.track);
+                    });
+                    partyController.socket.to(party.getLabel()).emit('queue', party.getQueue().getObjectWithoutId());
+                    res.jsonp({'Status': 'Playlist Added'});
+                }
             });
 
         } catch (e) {
