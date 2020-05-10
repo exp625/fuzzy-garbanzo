@@ -28,11 +28,12 @@ export class JamSessionSidebarComponent implements OnInit {
 
   ngOnInit() {
     this.spotify.getDevices().subscribe(value => {
-      this.avaliableDevices = value.devices;
+      this.avaliableDevices = value;
       this.selectedDevice = this.avaliableDevices[0].id;
     });
 
     this.spotify.getPlaylists().subscribe(value => {
+      
       this.avaliablePlaylists = value.items as SpotifyPlaylistSimplified[];
       this.selectedPlaylist = this.avaliablePlaylists[0].id;
     });

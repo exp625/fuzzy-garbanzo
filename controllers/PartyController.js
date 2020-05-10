@@ -203,7 +203,7 @@ class Party{
                     'state': this.getPlaybackState()
                 });
             } catch (e) {
-                
+
             }
         });
     }
@@ -342,11 +342,15 @@ exports.getParty = function (label) {
     return party;
 };
 
+
+
 exports.getPartyInfo = function (req, res, next) {
     const label = req.session.label;
     try {
         const party = partyController.getParty(label);
         const user = party.getUser();
+
+
         res.jsonp({'id': user.id, 'display_name': user.display_name});
 
     } catch (e) {

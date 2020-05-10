@@ -17,7 +17,7 @@ export class JamSessionQueueComponent implements OnInit {
   @Input() userStatus;
 
   public pauseButtonFlag = true;
-  public currentSong: QueueSong = undefined;
+  public currentSong: any = undefined;
   public playbackState = undefined;
   public songList: QueueSong[] = [];
   public partyQueue: QueueSong[] = [];
@@ -29,15 +29,16 @@ export class JamSessionQueueComponent implements OnInit {
   ngOnInit() {
     this.getQueue();
     this.spotify.getState().subscribe(state => {
-      console.log(state.currentSong);
-      console.log(state.state);
-      this.currentSong = state.currentSong;
+      console.log(<any>state.currentSong);
+      console.log(<any>state.state);
+      this.currentSong = {'spotifyTrackFull': <any>state.currentSong};
       this.playbackState = state.state;
     });
     this.socket.fromEvent('test').subscribe(value => {
       console.log('Socket Test');
     });
     this.socket.fromEvent<QueueSong[]>('queue').subscribe(queue => {
+      console.log('Socket Event', queue);
       this.partyQueue = queue.map( (q) => {
         let voted = false;
         this.partyQueue.forEach( value => {
@@ -53,9 +54,9 @@ export class JamSessionQueueComponent implements OnInit {
     });
 
     this.socket.fromEvent<any>('playback').subscribe( playback => {
-      console.log('Playback Socket');
+      console.log('Socket Event', playback);
       this.playbackState = playback.state;
-      this.currentSong = playback.currentSong;
+      this.currentSong = {'spotifyTrackFull': <any>playback.currentSong};
     });
   }
 
@@ -92,7 +93,7 @@ export class JamSessionQueueComponent implements OnInit {
 
   getQueue() {
     this.spotify.getQueue().subscribe( value => {
-      console.log(value);
+      console.log("Queue", value);
       this.songList = value;
       this.partyQueue = value;
     });
