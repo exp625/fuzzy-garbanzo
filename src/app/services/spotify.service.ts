@@ -13,7 +13,7 @@ export class SpotifyService {
 
   private authToken: string = null;
   private scope = 'user-read-private user-read-email user-modify-playback-state';
-  private uri = '/api/spotify';
+  private uri = '/api/v1/spotify';
   private spotifyWebApi = 'https://api.spotify.com/v1';
 
   private headers = {
@@ -30,56 +30,52 @@ export class SpotifyService {
   }
 
   createNewParty() {
-    return this.http.get<any>('/api/party/create');
+    return this.http.get<any>('/api/v1/party/create');
   }
 
   leave() {
-    return this.http.get<any>('/api/party/leave');
+    return this.http.get<any>('/api/v1/party/leave');
   }
 
   joinParty(label: string) {
     const payload = {'label': label};
-    return this.http.put<any>('/api/party/join', payload, this.headers);
+    return this.http.put<any>('/api/v1/party/join', payload, this.headers);
   }
 
   getPartyInfo() {
-    return this.http.get<any>('/api/party/info');
+    return this.http.get<any>('/api/v1/party/');
   }
 
   getQueue() {
-    return this.http.get<QueueSong[]>('/api/party/queue');
+    return this.http.get<QueueSong[]>('/api/v1/queue/');
   }
 
   vote(spotifyTrackFull: SpotifyTrackFull) {
-    return this.http.put<QueueSong[]>('/api/party/vote', spotifyTrackFull, this.headers);
+    return this.http.put<QueueSong[]>('/api/v1/queue/vote', {song: spotifyTrackFull}, this.headers);
   }
 
   getDevices() {
-    return this.http.get<any>('/api/spotify/devices');
+    return this.http.get<any>('/api/v1/spotify/devices');
   }
 
   addPlaylist(uri) {
-    return this.http.put<any>('/api/party/playlist', {'uri': uri}, this.headers);
+    return this.http.put<any>('/api/v1/queue/playlist', {'uri': uri}, this.headers);
   }
 
   getPlaylists() {
-    return this.http.get<any>('/api/spotify/playlist');
+    return this.http.get<any>('/api/v1/spotify/playlist');
   }
 
   saveSettings(payload) {
-    return this.http.put('/api/party/settings', payload, this.headers);
+    return this.http.put('/api/v1/party/', payload, this.headers);
   }
 
   setPlayback(payload) {
-    return this.http.put('/api/party/playback', payload, this.headers);
-  }
-
-  setName(name) {
-    return this.http.put<any>('/api/party/name', {'name': name}, this.headers);
+    return this.http.put('/api/v1/party/playback', payload, this.headers);
   }
 
   getState() {
-    return this.http.get<any>('/api/party/state');
+    return this.http.get<any>('/api/v1/party/playback');
   }
 
   setAuthToken(authToken: string) {

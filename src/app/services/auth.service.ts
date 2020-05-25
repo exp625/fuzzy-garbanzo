@@ -6,22 +6,18 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 })
 export class AuthService {
 
-  private authUrl = '/api/auth';
+  private authUrl = '/api/v1/auth';
 
   constructor(private http: HttpClient) {
 
   }
 
   getUserStatus() {
-    return this.http.get<any>(this.authUrl + '/status/');
+    return this.http.get<any>(this.authUrl + '/status');
   }
 
   spotifyLogin() {
-    return this.http.get<any>(this.authUrl + '/login/');
+    return this.http.get<any>(this.authUrl + '/login');
   }
-
-
-
-
-
+  
 }

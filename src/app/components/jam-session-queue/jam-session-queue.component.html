@@ -22,8 +22,8 @@
         {{currentSong.spotifyTrackFull.name}}
       </div>
       <div class="col-md-1 col-2">
-        <button *ngIf="playbackState.is_playing && userStatus.user === 'Host'" (click)="playback(false)" class="btn btn-primary" >Stop</button>
-        <button *ngIf="!playbackState.is_playing && userStatus.user === 'Host'" (click)="playback(true)" class="btn btn-primary" >Play</button>
+        <button *ngIf="playbackState?.is_playing && userStatus.user === 'Host'" (click)="playback(false)" class="btn btn-primary" >Stop</button>
+        <button *ngIf="!playbackState?.is_playing && userStatus.user === 'Host'" (click)="playback(true)" class="btn btn-primary" >Play</button>
       </div>
     </div>
   </li>

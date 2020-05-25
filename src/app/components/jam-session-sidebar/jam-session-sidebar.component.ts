@@ -33,21 +33,20 @@ export class JamSessionSidebarComponent implements OnInit {
     });
 
     this.spotify.getPlaylists().subscribe(value => {
-      
+
       this.avaliablePlaylists = value.items as SpotifyPlaylistSimplified[];
       this.selectedPlaylist = this.avaliablePlaylists[0].id;
     });
 
     this.spotify.getPartyInfo().subscribe(value => {
       console.log(value);
-      this.partyName = value.display_name;
+      this.partyName = value.name;
     });
   }
 
   saveSettings() {
-    console.log({'device': this.selectedDevice, 'ip': this.ipVoting});
-    this.spotify.saveSettings({'device': this.selectedDevice, 'ip': this.ipVoting}).subscribe();
-    this.nameParty();
+    console.log({'device': this.selectedDevice, 'ip': this.ipVoting, 'name': this.partyName});
+    this.spotify.saveSettings({'device': this.selectedDevice, 'ip': this.ipVoting, 'name': this.partyName}).subscribe();
   }
 
   leave() {
@@ -61,12 +60,6 @@ export class JamSessionSidebarComponent implements OnInit {
   addPlaylist() {
     console.log(this.selectedPlaylist);
     this.spotify.addPlaylist(this.selectedPlaylist).subscribe();
-  }
-
-  nameParty() {
-    this.spotify.setName(this.partyName).subscribe(value => {
-      this.partyName = value.display_name;
-    });
   }
 
   tv() {
